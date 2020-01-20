@@ -1,15 +1,8 @@
-LIB_NAME=bootstrap
-LIB=github.com/winwisely99/$(LIB_NAME)
-LIB_BRANCH=master
-LIB_FSPATH=$(GOPATH)/src/$(LIB)
+GO111MODULE=on
 
 LIB_BIN_NAME=googlesheet
 LIB_BIN_FSPATH=$(GOPATH)/bin/$(LIB_BIN_NAME)
 
-SAMPLE_NAME=tool/googlesheet
-SAMPLE_FSPATH=$(LIB_FSPATH)/$(SAMPLE_NAME)
-
-GO111MODULE=on
 
 CLOUD_PROJECT_ID=winwisely-cloudrun-googlesheet
 

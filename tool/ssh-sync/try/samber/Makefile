@@ -54,7 +54,7 @@ build:
 	cd $(LIB_FSPATH) && CGO_ENABLED=0 GO111MODULE=on go build -v $(LDFLAGS) -o $(LIB_BIN_FSPATH) $(SRC)
 
 run-build:
-	$(LIB_BIN_FSPATH) --github-username winwisely99
+	$(LIB_BIN_FSPATH) --github-username winwisely02
 
 run-dev:
 	cd $(LIB_FSPATH) && go run -v $(LDFLAGS) ${SRC} --github-username samber

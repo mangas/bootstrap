@@ -1,5 +1,4 @@
-# mock data from gsheet
-assets/mockData2
+# Ours
 pubspec.lock
 .packages
 
@@ -90,9 +89,3 @@ coverage/
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
 
-# Firebase Public folder
-.firebase
-public/
-
-# siging key
-_keys

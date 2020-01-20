@@ -1,15 +1,10 @@
-# https://github.com/iwittkau/mage-select
-# /Users/apple/workspace/go/src/github.com/iwittkau/mage-select
 
-# my fork: https://github.com/winwisely99/mage-select
-# use this until he merges my PR
 
 .DEFAULT_GOAL:=help
 SHELL:=/bin/bash
 
-
 LIB_NAME=mage-select
-LIB=github.com/winwisely99/$(LIB_NAME)
+LIB=github.com/iwittkau/$(LIB_NAME)
 LIB_BRANCH=master
 LIB_TAG=v1.0.0
 LIB_FSPATH=$(GOPATH)/src/$(LIB)
@@ -23,7 +18,7 @@ help:  ## Display this help
 
 
 print: ## Print
-	# info is standard. error and warming also work.
+	# info is standard. error and warning also work.
 	$(info )
 	$(info Variables - )
 
@@ -73,14 +68,30 @@ git-code: ## Git clean
 
 dep: ## dep
 
-	go get -u -d github.com/magefile/mage
+	# mage
+	GO111MODULE=off go get -u -d github.com/magefile/mage
 	cd $(GOPATH)/src/github.com/magefile/mage && go run bootstrap.go
 
-build: dep
-	cd $(LIB_FSPATH) && mage install
-	cd $(LIB_FSPATH) && mages
-	
+	# mage-select
+	GO111MODULE=off go get -u -d github.com/iwittkau/mage-select
 
+build: dep ## build
+	cd $(LIB_FSPATH) && mage install
+	
+build-run: build ## build-run
+	cd $(LIB_FSPATH) && mages
+
+run: ## run
+	cd $(LIB_FSPATH) && mages
+
+build-clean: ## build-clean
+	# go stuff
+	go clean -cache
+	go clean -modcache
+	go clean -testcache
+
+	# binary in the GO BIN path
+	rm $(LIB_BIN_FSPATH)
 
 
 

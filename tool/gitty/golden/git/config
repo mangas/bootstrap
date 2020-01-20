@@ -6,10 +6,10 @@
 	ignorecase = true
 	precomposeunicode = true
 [remote "origin"]
-	url = git@github.com-winwisely99:winwisely99/bootstrap.git
+	url = git@github.com-winwiselyxx:winwiselyxx/bootstrap.git
 	fetch = +refs/heads/*:refs/remotes/origin/*
 [branch "master"]
 	remote = origin
 	merge = refs/heads/master
 [user]
-	email = winwisely99@gmail.com
+	email = winwiselyxx@gmail.com

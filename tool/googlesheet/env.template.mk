@@ -1,5 +1,5 @@
 LIB_NAME=bootstrap
-LIB=github.com/winwisely99/$(LIB_NAME)
+LIB=github.com/yourrepo/$(LIB_NAME)
 LIB_BRANCH=master
 LIB_FSPATH=$(GOPATH)/src/$(LIB)
 

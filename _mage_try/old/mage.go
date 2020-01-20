@@ -26,7 +26,7 @@ const (
 )
 
 const (
-	packageName  = "github.com/winwisely99/bootstrap"
+	packageName  = "github.com/getcouragenow/bootstrap"
 	noGitLdflags = "-X $PACKAGE/common/bootstrap.buildDate=$BUILD_DATE"
 )
 

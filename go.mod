@@ -1,4 +1,4 @@
-module github.com/winwisely99/bootstrap
+module github.com/getcouragenow/bootstrap
 
 go 1.13
 

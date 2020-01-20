@@ -1,73 +1,77 @@
-# see: https://github.com/news-maily/app/blob/master/Makefile
+.DEFAULT_GOAL       := help
+VERSION             := v0.0.0
+TARGET_MAX_CHAR_NUM := 20
 
+GREEN  := $(shell tput -Txterm setaf 2)
+YELLOW := $(shell tput -Txterm setaf 3)
+WHITE  := $(shell tput -Txterm setaf 7)
+RESET  := $(shell tput -Txterm sgr0)
 
+.PHONY: help build fmt lint test release-tag release-push
 
-.PHONY: build
+## Show help
+help:
+	@echo 'Package eris provides a better way to handle errors in Go.'
+	@echo ''
+	@echo 'Usage:'
+	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
+	@echo ''
+	@echo 'Targets:'
+	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
+		helpMessage = match(lastLine, /^## (.*)/); \
+		if (helpMessage) { \
+			helpCommand = substr($$1, 0, index($$1, ":")-1); \
+			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
+			printf "  ${YELLOW}%-$(TARGET_MAX_CHAR_NUM)s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
+		} \
+	} \
+	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-ifneq ($(shell uname), Darwin)
-	EXTLDFLAGS = -extldflags "-static" $(null)
-else
-	EXTLDFLAGS =
-endif
+## Build the code
+build:
+	@echo Building
+	@go build -v .
 
-OS_NAME := $(shell uname -s | tr A-Z a-z)
+## Run the code
+run:
+	@echo Running
+	@go run -v .
 
-os:
-	@echo $(OS_NAME)
+## Format with go-fmt
+fmt:
+	@echo Formatting
+	@go fmt .
 
+## Lint with golangci-lint
+lint:
+	@echo Linting
+	@golangci-lint run --no-config --issues-exit-code=0 --timeout=5m
 
+## Run the tests
+test:
+	@echo Running tests
+	@go test -race -v .
 
-PACKAGES = $(shell go list ./... | grep -v /vendor/)
+## Run the tests with coverage
+test-coverage:
+	@echo Running tests with coverage
+	@go test -short -coverprofile cover.out -covermode=atomic ${PKG_LIST}
 
+## Display test coverage
+display-coverage:
+	@echo Displaying test coverage
+	@go tool cover -html=cover.out
 
-gen: gen_migrations
+## Stage a release (usage: make release-tag VERSION={VERSION_TAG})
+release-tag: build fmt lint test
+	@echo Tagging release with version "${VERSION}"
+	@git tag -a ${VERSION} -m "chore: release version '${VERSION}'"
+	@echo Generating changelog
+	@git-chglog -o CHANGELOG.md
+	@git add CHANGELOG.md
+	@git commit -m "chore: update changelog for version '${VERSION}'"
 
-gen_migrations:
-	#go generate github.com/news-maily/app/storage/migrations
-
-test: 
-	#go test -cover $(PACKAGES)
-
-bootstrap:
-ifeq ($(OS),Windows_NT)
-	# install 
-	scoop install docker
-else 
-	UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S),Linux)
-	# linux
-	#apt install libglfw
-endif
-ifeq ($(UNAME_S),Darwin)
-	# run bash
-	cd mac && ./bootstrap.bash
-endif
-endif
-	
-tools:
-	go build -o ./bootstrap main.go
-
-build: build_go
-
-build_go:
-	mkdir -p bin
-	cd $(PWD)/example/go/hello && $(MAKE) all
-	cd $(PWD)/example/go/embedcloud && $(MAKE) all
-	cd $(PWD)/example/go/screenshot && $(MAKE) all
-	cd $(PWD)/example/go/glfw && $(MAKE) all
-	
-	#go build -o bin/app .
-	#go build -o bin/bulksender ./consumers/bulksender
-	#go build -o bin/campaigner ./consumers/campaigner
-
-build-flutter:
-	cd $(PWD)/example/flutter/go-flutter-desktop/examples && $(MAKE) all
-
-
-build_static:
-	cd dashboard; yarn && yarn build
-	mkdir -p static
-	cp -r dashboard/build static/dashboard
-
-image:
-	docker build -t news-maily/app:latest .
+## Push a release (warning: make sure the release was staged properly before doing this)
+release-push:
+	@echo Publishing release
+	@git push --follow-tags

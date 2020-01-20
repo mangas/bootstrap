@@ -14,10 +14,23 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/getcouragenow/bootstrap/tool/googlesheet/services/config"
 	"github.com/pkg/errors"
 
 	"github.com/tidwall/pretty"
 )
+
+// CleanTranslation struct used to clean hugo translations files
+type CleanTranslation struct {
+	Error *string `json:"error"`
+	Fixe  *string `json:"fixe"`
+}
+
+// TomlFormat struct
+type TomlFormat struct {
+	Key    string
+	Values [][]string
+}
 
 // do not edit this mapping
 var mimeMap = map[string]string{
@@ -141,50 +154,53 @@ func WriteLanguageFiles(csvFilePath string, jsonDirPath string, sheet string) er
 		return errors.New("Cannot read file:" + csvFilePath)
 	}
 
+	langFileName := "labels.json"
+
+	langFilePath := filepath.Join(jsonDirPath, langFileName)
+
+	langAbsPath, err := filepath.Abs(langFilePath)
+	if err != nil {
+		log.Println(sheet, " : ", "Cannot get path specified: \""+langAbsPath+"\"", err)
+		return errors.New("Cannot get path specified:" + langFilePath)
+	}
+
+	createFile(langAbsPath)
+
+	file, err := os.OpenFile(langAbsPath, os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println(sheet, " : ", "Cannot open file: \""+langAbsPath+"\"", err)
+		return errors.Wrap(err, sheet+" : "+"Cannot open file: \""+langAbsPath+"\"")
+	}
+
+	//log.Println("langAbsPath: \"" + langAbsPath + "\"")
+	//os.Exit(1)
+
+	err = file.Truncate(0)
+	if err != nil {
+		return errors.New("Cannot truncate file:")
+	}
+	mapFull := map[string]map[string]string{}
 	// walk content for each lang
 	for i, lang := range csvFileContent[0][1:] {
-		langFileName := lang + ".json"
 
-		langFilePath := filepath.Join(jsonDirPath, langFileName)
-
-		langAbsPath, err := filepath.Abs(langFilePath)
-		if err != nil {
-			log.Println(sheet, " : ", "Cannot get path specified: \""+langAbsPath+"\"", err)
-			return errors.New("Cannot get path specified:" + langFilePath)
-		}
-
-		createFile(langAbsPath)
-
-		file, err := os.OpenFile(langAbsPath, os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			log.Println(sheet, " : ", "Cannot open file: \""+langAbsPath+"\"", err)
-			return errors.Wrap(err, sheet+" : "+"Cannot open file: \""+langAbsPath+"\"")
-		}
-
-		//log.Println("langAbsPath: \"" + langAbsPath + "\"")
-		//os.Exit(1)
-
-		err = file.Truncate(0)
-		if err != nil {
-			return errors.New("Cannot truncate file:" + lang)
-		}
 		mapLn := map[string]string{}
-		log.Println("Language:", lang, i)
+		log.Println("Language : ", lang, i)
 		for j, row := range csvFileContent[1:] {
 			// fmt.Println(csvFileContent[j+1][0], row[i+1])
 			mapLn[csvFileContent[j+1][0]] = row[i+1]
 		}
-		encodedJSON, _ := json.Marshal(mapLn)
-		// log.Println(string(encodedJSON))
+		mapFull[lang] = mapLn
+	}
+	encodedJSON, _ := json.Marshal(mapFull)
+	// log.Println(string(encodedJSON))
 
-		_, err = file.Write(FormatJSON(encodedJSON))
-		if err != nil {
-			return errors.New("Cannot write to file:" + lang)
-		}
-		err = file.Close()
-		if err != nil {
-			return errors.New("Cannot Close to file:" + lang)
-		}
+	_, err = file.Write(FormatJSON(encodedJSON))
+	if err != nil {
+		return errors.New("Cannot write to file:")
+	}
+	err = file.Close()
+	if err != nil {
+		return errors.New("Cannot Close to file:")
 	}
 	return nil
 }
@@ -236,23 +252,15 @@ func WriteDataDumpFiles(csvFilePath string, jsonDirPath string, sheet string) er
 		data = append(data, map[string]string{})
 		for columnIndex, key := range keys {
 			if strings.Contains(key, "_url") && strings.TrimSpace(row[columnIndex]) != "" {
-				u, err := url.Parse(row[columnIndex])
-				if err != nil {
-					data[rowIndex][key] = "error downloading"
-					panic(err)
-				} else {
-					m, _ := url.ParseQuery(u.RawQuery)
-					if m.Get("id") != "" {
-						link := fmt.Sprintf("https://drive.google.com/uc?authuser=0&id=%v&export=download", m["id"][0])
-						AbsFilePath, err := GetAbsoluteFilePath("./outputs/datadump/json/"+sheet+"/"+m["id"][0], sheet)
-						err = Download(link, AbsFilePath, 5000, sheet, false)
-						if err != nil {
-							log.Println(sheet, " : ", err)
-							data[rowIndex][key] = "error downloading"
-						} else {
-							data[rowIndex][key] = "assets/mockData/" + sheet + "/" + m["id"][0] + ".png"
-						}
+				if strings.Contains(row[columnIndex], ",") {
+					var paths []string
+					urls := strings.Split(row[columnIndex], ",")
+					for _, url := range urls {
+						paths = append(paths, downloadURL(strings.TrimSpace(url), sheet))
 					}
+					data[rowIndex][key] = strings.Join(paths, ",")
+				} else {
+					data[rowIndex][key] = downloadURL(strings.TrimSpace(row[columnIndex]), sheet)
 				}
 
 			} else {
@@ -300,4 +308,284 @@ func WriteDataDumpFiles(csvFilePath string, jsonDirPath string, sheet string) er
 func FormatJSON(json []byte) (result []byte) {
 	result = pretty.Pretty(json)
 	return result
+}
+
+// Download the file in the url
+func downloadURL(cell string, sheet string) string {
+	u, err := url.Parse(cell)
+	if err != nil {
+		return "error downloading"
+		//panic(err)
+	} else {
+		m, _ := url.ParseQuery(u.RawQuery)
+		if m.Get("id") != "" {
+			link := fmt.Sprintf("https://drive.google.com/uc?authuser=0&id=%v&export=download", m["id"][0])
+			AbsFilePath, err := GetAbsoluteFilePath("./outputs/datadump/json/"+sheet+"/"+m["id"][0], sheet)
+			err = Download(link, AbsFilePath, 5000, sheet, false)
+			if err != nil {
+				log.Println(sheet, " : ", err)
+				return "error downloading"
+			} else {
+				return "assets/mockData/" + sheet + "/" + m["id"][0] + ".png"
+			}
+		} else {
+			return "invalid link"
+		}
+	}
+}
+
+// WriteHugoFiles exported
+func WriteHugoFiles(csvFilePath string, config config.Config, cleanTagsDir, cleanTagsFileName string) error {
+
+	// open csv file
+	csvFileContent, err := openCSVFile(csvFilePath)
+
+	if err != nil {
+		return err
+	}
+
+	err = mkDirIfNotExists(config.OutDir)
+
+	if err != nil {
+		return fmt.Errorf("Cannot create dir: %v", err)
+	}
+
+	if config.Merge == "row" {
+		return mergeRow(csvFileContent, config, cleanTagsDir, cleanTagsFileName)
+	} else if config.Merge == "column" {
+		return mergeColumns(csvFileContent, config, cleanTagsDir, cleanTagsFileName)
+	} else if config.Merge == "cell" {
+		return mergeCell(csvFileContent, config, cleanTagsDir, cleanTagsFileName)
+	}
+
+	return errors.New("Merge should be column or row")
+}
+
+func getOutFileName(fileName, colName string) string {
+	if fileName == "" {
+		return colName
+	}
+	return fileName
+}
+
+func mergeCell(csvFileContent [][]string, config config.Config, cleanTagsDir, cleanTagsFileName string) error {
+
+	for index, col := range csvFileContent[0][1:] {
+		index++
+		for _, row := range csvFileContent[1:] {
+
+			outDir := strings.ReplaceAll(config.OutDir, "XXX", col)
+			err := mkDirIfNotExists(outDir)
+			if err != nil {
+				return err
+			}
+
+			outFile := row[0]
+			if config.FileName != "" {
+				outFile = strings.ReplaceAll(config.FileName, "XXX", col) + config.Extension
+			}
+
+			cleanedData := cleanData(row[index], cleanTagsDir, cleanTagsFileName)
+			err = writeOutFile(cleanedData, outDir+outFile)
+
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func mergeRow(csvFileContent [][]string, config config.Config, cleanTagsDir, cleanTagsFileName string) error {
+
+	err := mkDirIfNotExists(config.OutDir)
+	if err != nil {
+		return err
+	}
+
+	for _, row := range csvFileContent[1:] {
+		data := ""
+
+		fileName := getOutFileName(config.FileName, row[0])
+
+		for _, col := range row[1:] {
+			data += col + "\n\n"
+
+			err = writeOutFile(data, config.OutDir+fileName+config.Extension)
+
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func mergeColumns(csvFileContent [][]string, config config.Config, cleanTagsDir, cleanTagsFileName string) error {
+
+	for index, col := range csvFileContent[0][1:] {
+		cache := make(map[string]int)
+		languages := []TomlFormat{}
+		cleanedData := ""
+		fileName := getOutFileName(config.FileName, col)
+		index++
+
+		for _, row := range csvFileContent[1:] {
+
+			err := mkDirIfNotExists(config.OutDir)
+			if err != nil {
+				return err
+			}
+
+			cleanedData = cleanData(row[index], cleanTagsDir, cleanTagsFileName)
+
+			h := TomlFormat{}
+			if strings.Contains(row[0], "(") {
+
+				// Check if row contains multi values
+				sp := strings.Split(row[0], "(")
+				tr := strings.TrimRight(sp[1], ")")
+				sp2 := strings.Split(tr, ".")
+
+				// if there is already a object with the same key in cache
+				// get index from cache and append to to values array
+				if i, ok := cache[cleanKey(sp[0])]; ok {
+
+					val := []string{sp2[1], cleanedData}
+					languages[i].Values = append(languages[i].Values, val)
+					continue
+				}
+
+				h = TomlFormat{Key: cleanKey(sp[0]), Values: [][]string{{sp2[1], cleanedData}}}
+
+			} else {
+				h = TomlFormat{Key: cleanKey(row[0]), Values: [][]string{{"other", cleanedData}}}
+			}
+
+			languages = append(languages, h)
+			cache[h.Key] = len(languages) - 1
+		}
+
+		fileData := ""
+		// populate hugo object
+
+		if config.Extension == ".toml" {
+			for _, item := range languages {
+
+				fileData += "[" + item.Key + "]\n"
+				for _, val := range item.Values {
+					fileData += val[0] + " = \"" + val[1] + "\"\n"
+				}
+				fileData += "\n"
+
+			}
+		} else {
+			return fmt.Errorf("'%s' extension not implemented", config.Extension)
+		}
+
+		err := writeOutFile(fileData, config.OutDir+fileName+config.Extension)
+
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func cleanData(data string, tagsFileDir, tagsFileName string) string {
+	cleanedData := data
+
+	cleanTags, _ := getCleanTranslationTags(tagsFileDir, tagsFileName)
+
+	for _, tag := range cleanTags {
+		cleanedData = strings.ReplaceAll(cleanedData, *tag.Error, *tag.Fixe)
+	}
+	// for tagIndex, tag := range tagsToRemove {
+	// 	cleanedData = strings.ReplaceAll(cleanedData, tag, tagsToReplace[tagIndex])
+	// }
+	return cleanedData
+}
+
+// open csv file
+func openCSVFile(csvFilePath string) ([][]string, error) {
+	// open csv file
+	csvFile, err := os.Open(csvFilePath)
+	defer csvFile.Close()
+
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot open file:"+csvFilePath)
+	}
+
+	// get csv file content
+	csvFileContent, err := csv.NewReader(csvFile).ReadAll()
+
+	if err != nil {
+		return nil, errors.New("Cannot read file:" + csvFilePath)
+	}
+	return csvFileContent, nil
+}
+
+func writeOutFile(data, outFilePath string) error {
+
+	file, err := os.OpenFile(outFilePath, os.O_WRONLY|os.O_CREATE, 0777)
+
+	defer file.Close()
+
+	if err != nil {
+		return err
+	}
+
+	// write to lang file
+	err = file.Truncate(0)
+
+	if err != nil {
+		return fmt.Errorf("Cannot truncate file: %v", err)
+	}
+
+	_, err = file.Write([]byte(data))
+
+	if err != nil {
+		return fmt.Errorf("Cannot write to file: %v", err)
+	}
+	return nil
+}
+
+func mkDirIfNotExists(path string) error {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, 0777)
+		if err != nil {
+			fmt.Println("Cannot create directory:", err)
+			return err
+		}
+	}
+	return nil
+}
+
+func cleanKey(key string) string {
+	return strings.ReplaceAll(key, ".", "_")
+}
+
+func getCleanTranslationTags(fileDir, fileName string) ([]*CleanTranslation, error) {
+
+	filePath, err := GetAbsoluteFilePath(fileDir, fileName)
+
+	if err != nil {
+		return nil, err
+	}
+
+	f, err := os.Open(filePath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	cleanData := []*CleanTranslation{}
+
+	err = json.NewDecoder(f).Decode(&cleanData)
+	if err != nil {
+		return nil, err
+	}
+
+	return cleanData, nil
 }

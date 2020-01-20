@@ -32,11 +32,6 @@ build:
 	@echo Building
 	@go build -v .
 
-## Run the code
-run:
-	@echo Running
-	@go run -v .
-
 ## Format with go-fmt
 fmt:
 	@echo Formatting

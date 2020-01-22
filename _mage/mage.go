@@ -1,7 +1,7 @@
 package main
 
 import (
-	mageutil "github.com/winwisely99/bootstrap/_mage/util"
+	mageutil "github.com/getcouragenow/bootstrap/_mage/util"
 	"os"
 )
 

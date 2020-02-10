@@ -1,6 +1,4 @@
-// +build mage
-
-package main
+package gsheet
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package main
+package dep
 
 import (
 	"os"
@@ -11,10 +11,13 @@ var curDir = func() string {
 	return name
 }()
 
-func WindowsDependency() {
+// install windows Dependencies.
+func Dependencies_InstallWindows() {
 	mageutil.Windows{}.InstallDependency()
 
 }
-func MacInstall() {
+
+// install Mac Dependencies.
+func Dependencies_InstallMac() {
 	mageutil.Mac{}.InstallDependency()
 }

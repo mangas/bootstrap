@@ -1,12 +1,11 @@
-package main
+package bootstrap
 
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path/filepath"
-	"time"
 
+	"github.com/getcouragenow/bootstrap/ci/utils"
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 	"github.com/magefile/mage/target"
@@ -33,74 +32,21 @@ var ldflags = "-X $PACKAGE/common/bootstrap.commitHash=$COMMIT_HASH -X $PACKAGE/
 // allow user to override go executable by running as GOEXE=xxx make ... on unix-like systems
 var goexe = "go"
 
-func init() {
-	if exe := os.Getenv("GOEXE"); exe != "" {
-		goexe = exe
-	}
+// Install hugo
+func Hugo_Install() error {
+	// mg.Deps(installHugo)
+	return installHugo()
 
-	// We want to use Go 1.11 modules even if the source lives inside GOPATH.
-	// The default is "auto".
-	os.Setenv("GO111MODULE", "on")
+	// err = sh.Run("hugo")
+	// if err != nil {
+	// 	return err
+	// }
+
+	// return nil
 }
 
-func flagEnv() map[string]string {
-	hash, _ := sh.Output("git", "rev-parse", "--short", "HEAD")
-	return map[string]string{
-		"PACKAGE":     packageName,
-		"COMMIT_HASH": hash,
-		"BUILD_DATE":  time.Now().Format("2006-01-02T15:04:05Z0700"),
-	}
-}
-
-func isCI() bool {
-	return os.Getenv("CI") != ""
-}
-
-func buildTags() string {
-	// To build the extended Hugo SCSS/SASS enabled version, build with
-	// HUGO_BUILD_TAGS=extended mage install etc.
-	if envtags := os.Getenv("HUGO_BUILD_TAGS"); envtags != "" {
-		return envtags
-	}
-	return "none"
-
-}
-
-// Print variables
-func Print() error {
-
-	fmt.Println(goexe)
-	fmt.Println(tempDir)
-	fmt.Println(cwd)
-
-	return nil
-}
-
-// Build bootstrap binary
-func Bootstrap() error {
-	//return sh.RunWith(flagEnv(), goexe, "build", "-ldflags", ldflags, "-tags", buildTags(), packageName)
-	return sh.RunWith(flagEnv(), goexe, "build", "-ldflags", ldflags, packageName)
-}
-
-// Build botstrap binary with race detector enabled
-func BootstrapRace() error {
-	return sh.RunWith(flagEnv(), goexe, "build", "-race", "-ldflags", ldflags, "-tags", buildTags(), packageName)
-}
-
-func Install() error {
-	//mg.Deps(installHugo)
-
-	err := installHugo()
-
-	err = sh.Run("hugo")
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func Uninstall() error {
+// Uninstall hugo
+func Hugo_Uninstall() error {
 	mg.Deps(uninstallHugo)
 
 	err := sh.Run("hugo")
@@ -111,7 +57,8 @@ func Uninstall() error {
 	return err
 }
 
-func cloneHugo() error {
+// clone caddy
+func Caddy_clone() error {
 
 	fmt.Println("cloning hugo...")
 	dir := filepath.Join(tempDir, "caddy")
@@ -127,12 +74,12 @@ func installHugo() error {
 	verbose("installing hugo...")
 
 	// TODO - try using to git clone so it matches makes TAGs, etc and we dont get messed up with go mod fun.
-	sh.RunWith(flagEnv(), goexe, "install", "github.com/gohugoio/hugo", "-tags", "extended")
+	sh.RunWith(utils.FlagEnv(packageName), goexe, "install", "github.com/gohugoio/hugo", "-tags", "extended")
 
 	//sh.Run("go", "get", "github.com/gohugoio/hugo")
 	//sh.RunWith(flagEnv(), goexe, "build", "-tags", "extended", "github.com/gohugoio/hugo")
 	//sh.Run("go", "install", "github.com/gohugoio/hugo", "-tags", "extended")
-	sh.RunWith(flagEnv(), goexe, "install", "github.com/gohugoio/hugo", "-tags", "extended")
+	sh.RunWith(utils.FlagEnv(packageName), goexe, "install", "github.com/gohugoio/hugo", "-tags", "extended")
 	//sh.Run("which", "hugo")
 	return nil
 }

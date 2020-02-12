@@ -11,7 +11,7 @@ require (
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/gobuffalo/envy v1.9.0 // indirect
 	github.com/gohugoio/hugo v0.64.0
-	github.com/iwittkau/mage-select v1.0.1 // indirect
+	github.com/iwittkau/mage-select v1.0.1
 	github.com/magefile/mage v1.9.0
 	github.com/pkg/errors v0.9.1
 	github.com/relvacode/iso8601 v0.0.0-20181221151331-e9cae14c704e

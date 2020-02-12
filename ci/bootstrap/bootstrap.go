@@ -51,7 +51,7 @@ func buildTags() string {
 
 }
 
-// Build bootstrap binary
+// Build bootstrap binary.
 func Bootstrap() error {
 	//return sh.RunWith(flagEnv(), goexe, "build", "-ldflags", ldflags, "-tags", buildTags(), packageName)
 	return sh.RunWith(utils.FlagEnv(packageName), goexe, "build", "-ldflags", ldflags, packageName)

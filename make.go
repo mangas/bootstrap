@@ -39,10 +39,10 @@ func runEnvironTest(envValue string) (err error) {
 	return nil
 }
 
-func main() {
-	checkExeExists("ls")
-	checkExeExists("ls2")
+// func main() {
+// 	checkExeExists("ls")
+// 	checkExeExists("ls2")
 
-	runEnvironTest("")
-	runEnvironTest("test value")
-}
+// 	runEnvironTest("")
+// 	runEnvironTest("test value")
+// }

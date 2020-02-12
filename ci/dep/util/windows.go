@@ -2,9 +2,10 @@ package util
 
 import (
 	"bytes"
+	"os/exec"
+
 	"github.com/fatih/color"
 	"github.com/magefile/mage/mg"
-	"os/exec"
 )
 
 type Windows mg.Namespace
@@ -68,6 +69,9 @@ func (Windows) InstallDependency() {
 	color.Red(err.Error())
 
 	_, _, err = posh.Execute("scoop install gcc")
+	color.Red(err.Error())
+
+	_, _, err = posh.Execute("scoop install go")
 	color.Red(err.Error())
 
 	_, _, err = posh.Execute("scoop install flutter")

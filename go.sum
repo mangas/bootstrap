@@ -124,6 +124,7 @@ github.com/fsnotify/fsnotify v1.4.7 h1:IXs+QLmnXW2CcXuY+8Mzv/fWEsPGWxqefPtCP5CnV
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/getcouragenow/bootstrap/tool/googlesheet v0.0.0-20200123105358-add65edeba5d h1:y6vd5LsyVG9SfYWt3cjt7j7+7ch2Oy56wZhMlEuY9es=
 github.com/getcouragenow/bootstrap/tool/googlesheet v0.0.0-20200123105358-add65edeba5d/go.mod h1:FIyvLJLn8l9pksbN5K6xk5UzxMnXFvF138gT5dLG6Ds=
+github.com/getcouragenow/bootstrap/tool/googlesheet v0.0.0-20200211084859-36088860f621 h1:nPwH3Fso856hjt2tIw+hQ/krhQuYaNsekIkJ91+tecg=
 github.com/ghodss/yaml v1.0.0/go.mod h1:4dBDuWmgqj2HViK6kFavaiC9ZROes6MMH2rRYeMEF04=
 github.com/go-flutter-desktop/go-flutter v0.35.1 h1:vs04dmq9CyrVC2UUam5JYN177bB4QOdYDl8kcoDQVOg=
 github.com/go-flutter-desktop/go-flutter v0.35.1/go.mod h1:eqenDt10Ece6cs/zZbLvT4Z1zf9k7gc+R8L7S68k6ao=

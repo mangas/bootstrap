@@ -2,6 +2,8 @@ package util
 
 import (
 	"bytes"
+	"fmt"
+	"os"
 	"os/exec"
 
 	"github.com/fatih/color"
@@ -77,6 +79,28 @@ func (Windows) InstallDependency() {
 	_, _, err = posh.Execute("scoop install flutter")
 	color.Red(err.Error())
 
+	setEnvVars()
+}
+
+func setEnvVars() {
+
+	if err := exec.Command("setx", "scoopApps", "C:\\Users\\%username%\\scoop\\apps").Run(); err != nil {
+		fmt.Println("Error to set scoopApps:", err)
+	}
+
+	if os.Getenv("GOPATH") == "" {
+		if err := exec.Command("setx", "GOPATH", "%scoopApps%/go").Run(); err != nil {
+			fmt.Println("Error to set GOPATH:", err)
+		}
+	}
+	if os.Getenv("GOBIN") == "" {
+		if err := exec.Command("setx", "GOBIN", "%GOPATH%/bin").Run(); err != nil {
+			fmt.Println("Error to set GOBIN:", err)
+		}
+		if err := exec.Command("setx", "%PATH%;%GOBIN%").Run(); err != nil {
+			fmt.Println("Error to set GOBIN PATH:", err)
+		}
+	}
 }
 
 //https://stackoverflow.com/questions/50809752/golang-invoking-powershell-exe-always-returns-ascii-characters

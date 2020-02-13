@@ -8,14 +8,16 @@ import (
 )
 
 var (
-	GOLANG_FILE    = "go1.13.4.linux-amd64.tar.gz"
-	PROTOC_VERSION = "3.10.1"
-	GOPATH         = os.Getenv("GOPATH")
-	PROTOC_FILE    = ""
+	golangFile    = "go1.13.4.linux-amd64.tar.gz"
+	protocVersion = "3.10.1"
+	goPath        = os.Getenv("GOPATH")
+	protocFile    = "protoc-" + protocVersion + "-linux-x86_64.zip"
 )
 
+// Linux namespace
 type Linux mg.Namespace
 
+// InstallDependency install linux dependencies
 func (Linux) InstallDependency() {
 
 	// deps
@@ -30,15 +32,15 @@ func (Linux) InstallDependency() {
 	sh.RunV("sudo", "apt-get", "install", "gcc")
 
 	// Golang
-	GOLANG_FILE := "go1.13.4.linux-amd64.tar.gz"
-	sh.RunV("curl", "https://dl.google.com/go/"+GOLANG_FILE, "-o", GOLANG_FILE)
-	sh.RunV("tar", "-C", "/usr/local/", "-xzf", GOLANG_FILE)
-	sh.RunV("rm", "-f", GOLANG_FILE)
+	golangFile := "go1.13.4.linux-amd64.tar.gz"
+	sh.RunV("curl", "https://dl.google.com/go/"+golangFile, "-o", golangFile)
+	sh.RunV("tar", "-C", "/usr/local/", "-xzf", golangFile)
+	sh.RunV("rm", "-f", golangFile)
 
 	// install protoc
-	sh.RunV("curl", "https://github.com/protocolbuffers/protobuf/releases/download/v"+PROTOC_VERSION+"/protoc-"+PROTOC_VERSION+"-linux-x86_64.zip", "-L", "-o", "protoc-"+PROTOC_VERSION+"-linux-x86_64.zip")
-	sh.RunV("unzip", "-o", "protoc-"+PROTOC_VERSION+"-linux-x86_64.zip", "-d", GOPATH)
-	sh.RunV("sudo", "rm", "-f", PROTOC_FILE)
+	sh.RunV("curl", "https://github.com/protocolbuffers/protobuf/releases/download/v"+protocVersion+"/protoc-"+protocVersion+"-linux-x86_64.zip", "-L", "-o", "protoc-"+protocVersion+"-linux-x86_64.zip")
+	sh.RunV("unzip", "-o", "protoc-"+protocVersion+"-linux-x86_64.zip", "-d", goPath)
+	sh.RunV("sudo", "rm", "-f", protocFile)
 
 	// install jdk
 	sh.RunV("sudo", "apt-get", "install", "openjdk-8-jdk")
@@ -46,4 +48,10 @@ func (Linux) InstallDependency() {
 	// Flutter github
 	sh.RunV("git", "clone", "-b", "https://github.com/flutter/flutter.git")
 	// ./flutter/bin/flutter --version
+
+	setEnvVarsLinux()
+}
+
+func setEnvVarsLinux() {
+	//Todo env vars
 }

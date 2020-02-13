@@ -2,16 +2,93 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
+	"os/exec"
+	"path"
 
-	u "github.com/getcouragenow/bootstrap/ci/utils"
 	"github.com/magefile/mage/mage"
-	"github.com/magefile/mage/parse"
 )
 
+const (
+	libName = "mage"
+	lib     = "github.com/magefile/"
+)
+
+var (
+	goPath    = ""
+	goBIN     = ""
+	libPath   = ""
+	libFSPath = ""
+)
+
+func init() {
+	goPath = os.Getenv("GOPATH")
+	goBIN = os.Getenv("GOBIN")
+	libPath = path.Join(goPath, "src", lib)
+	libFSPath = path.Join(libPath, libName)
+}
+
 func main() {
-	u.GetPath()
-	fmt.Println(mage.Magefiles(".", "linux", "amd64", "go", os.Stderr, false))
-	fmt.Println(mage.GenerateMainfile("xxx", "./xxx", &parse.PkgInfo{}))
 	os.Exit(mage.Main())
 }
+
+func installMage() {
+
+	err := os.RemoveAll(libPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	os.Getenv("GOBIN")
+	err = os.MkdirAll(libPath, 0700)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.Chdir(libPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	cmd := exec.Command("git", "clone", "ssh://git@github.com/magefile/mage.git")
+	cmd.Stderr = os.Stderr
+
+	err = cmd.Run()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.Chdir(libFSPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(os.Getwd())
+	cmd = exec.Command("go", "run", "bootstrap.go")
+	err = cmd.Run()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// func checkDeps() {
+// 	_, err := os.Stat(goBIN + "/mage")
+// 	if err != nil {
+// 		fmt.Println("start installing Mage")
+// 		installMage()
+// 		fmt.Println("Mage installed")
+// 	}
+
+// 	_, err = os.Stat(goBIN + "/mages")
+// 	if err != nil {
+// 		fmt.Println("start installing Mage-select")
+// 		m.MageSelect_Install()
+// 		fmt.Println("Mage-select installed")
+// 	}
+// }

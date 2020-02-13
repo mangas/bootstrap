@@ -55,5 +55,4 @@ func (Hover) Install() {
 	// build hover
 	os.Chdir(libFSPATH)
 	sh.RunV("go", "build", "-o", libBinFSPATH, ".")
-	sh.RunV("hover")
 }

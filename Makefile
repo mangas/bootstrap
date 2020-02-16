@@ -8,9 +8,13 @@ YELLOW := $(shell tput -Txterm setaf 3)
 WHITE  := $(shell tput -Txterm setaf 7)
 RESET  := $(shell tput -Txterm sgr0)
 
+# boilerplate
+export REPOSITORY=bootstrap
+include boilerplate/cgn/git/Makefile
+#include boilerplate/lyft/docker_build/Makefile
+#include boilerplate/lyft/golang_test_targets/Makefile
 
 # git
-#export REPOSITORY=doc
 REPO_NAME=$(notdir $(shell pwd))
 UPSTREAM_ORG=getcouragenow
 FORK_ORG=$(shell basename $(dir $(abspath $(dir $$PWD))))
@@ -50,6 +54,13 @@ print:
 	@echo VERSION: $(VERSION)
 	@echo
 
+## boilerplate-update
+boilerplate-update: 
+	# See: https://github.com/lyft/boilerplate
+	# Example: See: https://github.com/lyft/flytepropeller/tree/master/boilerplate
+	@boilerplate/update.sh
+
+
 ## Build the code
 build:
 	@echo Building
@@ -86,7 +97,7 @@ display-coverage:
 	@go tool cover -html=cover.out
 
 ## Stage a release (usage: make release-tag VERSION={VERSION_TAG})
-release-tag: build fmt lint test
+git-release-tag: build fmt lint test
 	@echo Tagging release with version "${VERSION}"
 	@git tag -a ${VERSION} -m "chore: release version '${VERSION}'"
 	@echo Generating changelog
@@ -95,33 +106,7 @@ release-tag: build fmt lint test
 	@git commit -m "chore: update changelog for version '${VERSION}'"
 
 ## Push a release (warning: make sure the release was staged properly before doing this)
-release-push:
+git-release-push:
 	@echo Publishing release
 	@git push --follow-tags
 
-### GIT-FORK
-
-#See: https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork
-## git-upstream-open
-git-upstream-open: 
-	open https://github.com/$(UPSTREAM_ORG)/$(REPO_NAME).git 
-
-## git-fork-open
-git-fork-open: 
-	open https://github.com/$(FORK_ORG)/$(REPO_NAME).git
-
-## git-fork-setup
-git-fork-setup: 
-	# Pre: you git forked ( via web) and git cloned (via ssh)
-	# add upstream repo
-	git remote add upstream git://github.com/$(UPSTREAM_ORG)/$(REPO_NAME).git
-
-## git-fork-catchup
-git-fork-catchup: 
-	# This fetches the branches and their respective commits from the upstream repository.
-	git fetch upstream 
-
-	# This brings your fork's master branch into sync with the upstream repository, without losing your local changes.
-	git merge upstream/master
-
-	# then in VSCODE just sync to push upwards to your fork.

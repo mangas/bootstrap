@@ -3,9 +3,11 @@
 package main
 
 import (
-
 	// mage:import
 	_ "github.com/getcouragenow/bootstrap/ci/gsheet"
+
+	// mage:import
+	_ "github.com/getcouragenow/bootstrap/ci/cloud"
 
 	// mage:import
 	_ "github.com/getcouragenow/bootstrap/ci/dep"
@@ -21,4 +23,13 @@ import (
 
 	// mage:import
 	_ "github.com/getcouragenow/bootstrap/ci/hover"
+
+	// mage:import
+	_ "github.com/getcouragenow/bootstrap/ci/git"
+
+	// mage:import
+	_ "github.com/getcouragenow/bootstrap/ci/flutter"
+
+	// mage:import
+	_ "github.com/getcouragenow/bootstrap/ci/build"
 )

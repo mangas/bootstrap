@@ -66,7 +66,7 @@ gsheet-open: ## gsheet-open
 	open $(GOOGLE_SHEET_CSV)
 
 ### build
-build: ## build
+build: ## build ****
 	go build -o $(LIB_BIN_FSPATH) .
 
 build-clean:

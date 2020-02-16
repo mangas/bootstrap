@@ -19,7 +19,7 @@ func main() {
 		processConfig(*option)
 	case "datadump":
 		processConfig(*option)
-	case "hugo":
+	case "i18n":
 		processConfig(*option)
 	default:
 		log.Println("Invalid Option ", *option)
@@ -52,7 +52,7 @@ func processConfig(option string) {
 			jsonRelDirPath := "./outputs/" + option + "/json/" + sheet + "/"
 			jsonAbsDirPath, err := services.GetAbsoluteFilePath(jsonRelDirPath, sheet)
 
-			log.Println(sheet, " JSON Output directory: "+jsonAbsDirPath)
+			// log.Println(sheet, " JSON Output directory: "+jsonAbsDirPath)
 			switch option {
 			case "lang":
 				err = services.WriteLanguageFiles(csvAbsFilePath, jsonAbsDirPath, sheet)
@@ -68,12 +68,12 @@ func processConfig(option string) {
 					wg.Done()
 					return
 				}
-			case "hugo":
+			case "i18n":
 				cleanTagsDir := "./clean_translation_tags.json"
 				cleanTagsFileName := "clean_translation_tags.json"
-				err = services.WriteHugoFiles(csvAbsFilePath, config, cleanTagsDir, cleanTagsFileName)
+				err = services.WriteFiles(csvAbsFilePath, config, cleanTagsDir, cleanTagsFileName)
 				if err != nil {
-					log.Println(sheet, " : ", err)
+					log.Println(err)
 					wg.Done()
 					return
 				}

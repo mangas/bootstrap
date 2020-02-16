@@ -25,6 +25,14 @@ Pluralisation
 |`plurals.man(Plural.zero)`| hommes | man
 |`plurals.man(Plural.one)`| Mme {{last_name}} | Mrs {{last_name}}
 
+
+## How it works:
+
+1 - You should have a file `config/i18nconfig.yml` in the location where you run the googlesheet tool.
+2 - see example [here](https://github.com/Winwisly100/bootstrap/blob/master/tool/googlesheet/config/i18nconfig.yml)
+3 - The extension field can have handel `.json`, `.arb` or `.toml`
+4 - Run ./googlesheet -option=i18n
+
 ## Status
 
 The API and data format will change as we are extending it currently.
@@ -125,3 +133,4 @@ GOOGLE_SHEET_URL = https://docs.google.com/spreadsheets/d/$(GOOGLE_SHEET_ID)
 GOOGLE_SHEET_URL (computed) = https://docs.google.com/spreadsheets/d/16eeYgh8dus50fISokKK8TMVWLR8A18Er-p5dBcO0FYw/edit#gid=0
 
 GOOGLE_SHEET_CSV = https://docs.google.com/spreadsheets/d/e/2PACX-1vTrndYJtszNP2_VL2t_z7wa03v2R01yq3wfRi4-RgmJMzXIEMzAX4OybZT7eEiqcmkZLWcFJhwJqJzA/pub?output=csv
+

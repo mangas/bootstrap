@@ -1,8 +1,9 @@
 package main
 
 import (
-	mageutil "github.com/getcouragenow/bootstrap/_mage/util"
 	"os"
+
+	mageutil "github.com/getcouragenow/bootstrap/_mage/util"
 )
 
 var curDir = func() string {

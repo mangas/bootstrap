@@ -1,14 +1,12 @@
-//+build mage
-
 package main
 
 import (
-	"filepath"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
+
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 	"github.com/magefile/mage/target"

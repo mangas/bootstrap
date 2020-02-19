@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802 // indirect
+	github.com/KnicKnic/go-powershell v0.0.10 // indirect
 	github.com/emirpasic/gods v1.12.0
 	github.com/fatih/color v1.9.0
 	github.com/getcouragenow/bootstrap/tool/googlesheet v0.0.0-20200123105358-add65edeba5d

@@ -215,67 +215,61 @@ func prettyJSON(json []byte) (result []byte) {
 	return result
 }
 
-// GenerateMultiLanguagesFilesFromFiles from
-func GenerateMultiLanguagesFilesFromFiles(outDir, filesDir, extFile, outExtFile string, full bool) error {
+// GenerateMultiLanguagesArbFilesFromJSONFiles generate arb files from json files
+func GenerateMultiLanguagesArbFilesFromJSONFiles(dir, prefix, extFile, outExtFile string, full bool) error {
 
 	if extFile == outExtFile {
 		return errors.New("extension file and out file extension should not be the same")
 	}
 
-	fileInfos, err := ioutil.ReadDir(filesDir)
+	fileInfos, err := ioutil.ReadDir(dir)
 
 	if err != nil {
 		return err
 	}
-
 	for _, file := range fileInfos {
 		if !file.IsDir() {
+			name, ext := getFileNameAndExtension(file.Name())
 
-			s := strings.Split(file.Name(), ".")
-			ext := s[len(s)-1]
+			if ext == extFile && strings.HasPrefix(name, prefix) {
 
-			if ext == extFile {
-
-				p, err := getPath(filesDir, file.Name(), "")
-				if err != nil {
-					return err
-				}
+				outDir := getPath(dir, name, outExtFile)
+				p := getPath(dir, name, ext)
 				data, err := ioutil.ReadFile(p)
 
 				if err != nil {
 					return err
 				}
 
-				var m *linkedhashmap.Map
+				if full {
 
-				if outExtFile == "json" {
-					m, err = JSONMap(data, full)
+					m, err := JSONMap(data)
 					if err != nil {
 						return err
 					}
-				} else if outExtFile == "arb" {
-					m, err = JSONMap(data, full)
+					data, err = m.ToJSON()
 					if err != nil {
 						return err
 					}
+
+					data = prettyJSON(data)
+
+					err = writeOutFile(string(data), outDir)
+					if err != nil {
+						return err
+					}
+				} else {
+
+					f, err := os.Create(outDir)
+					defer f.Close()
+
+					if err != nil {
+						return err
+					}
+
+					f.Write(data)
 				}
 
-				data, err = m.ToJSON()
-				if err != nil {
-					return err
-				}
-
-				data = prettyJSON(data)
-
-				p, err = getPath(outDir, strings.TrimRight(file.Name(), ext), outExtFile)
-				if err != nil {
-					return err
-				}
-
-				err = writeOutFile(string(data), p)
-				if err != nil {
-					return err
-				}
 			}
 		}
 	}
@@ -284,8 +278,8 @@ func GenerateMultiLanguagesFilesFromFiles(outDir, filesDir, extFile, outExtFile 
 
 // GenerateMultiLanguageFilesFromTemplate write multilanguage json files
 func GenerateMultiLanguageFilesFromTemplate(templatePath, outPath, fileName, ext, sep string, languages []string, full bool) error {
-	data, err := ioutil.ReadFile(templatePath)
 
+	data, err := ioutil.ReadFile(templatePath)
 	if err != nil {
 		return err
 	}
@@ -320,9 +314,9 @@ func writeOutFiles(translatedMaps *TranslatedMaps, outPath, fileName, ext string
 		}
 
 		name := fmt.Sprintf("%s_%s", fileName, translatedMaps.Langs[i])
-		outPath, err := getPath(outPath, name, ext)
-
+		outPath := getPath(outPath, name, ext)
 		data = prettyJSON(data)
+
 		err = writeOutFile(string(data), outPath)
 		if err != nil {
 			return err
@@ -331,15 +325,13 @@ func writeOutFiles(translatedMaps *TranslatedMaps, outPath, fileName, ext string
 	return nil
 }
 
-func getPath(dirPath, fileName, ext string) (string, error) {
-	var err error
+func getPath(dirPath, fileName, ext string) string {
+	return path.Join(dirPath, fileName+"."+ext)
+}
 
-	if dirPath == "" {
-		dirPath, err = os.Getwd()
-		if err != nil {
-			return "", err
-		}
-	}
-	dirPath = path.Join(dirPath, fileName+ext)
-	return dirPath, nil
+func getFileNameAndExtension(fileName string) (name string, ext string) {
+	s := strings.Split(fileName, ".")
+	name = s[0]
+	ext = s[len(s)-1]
+	return
 }

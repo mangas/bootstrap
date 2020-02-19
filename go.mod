@@ -6,7 +6,8 @@ require (
 	github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802 // indirect
 	github.com/emirpasic/gods v1.12.0
 	github.com/fatih/color v1.9.0
-	github.com/getcouragenow/bootstrap/tool/googlesheet v0.0.0-20200123105358-add65edeba5d
+	github.com/getcouragenow/bootstrap/tool/googlesheet v0.0.0-20200216153739-62b1c832988f
+	github.com/getcouragenow/bootstrap/tool/i18n v0.0.0-20200219164813-03b382fcbb1f // indirect
 	github.com/go-flutter-desktop/go-flutter v0.35.1 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/gobuffalo/envy v1.9.0 // indirect

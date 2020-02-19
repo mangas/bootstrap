@@ -1,4 +1,4 @@
-# google sheet
+# i18n tool
 
 An approach to i18n and i10l that is decoupled so that it can be used by any projects or architecture.
 
@@ -28,15 +28,16 @@ Pluralisation
 
 ## How it works:
 
-1 - You should have a file `config/i18nconfig.yml` in the location where you run the googlesheet tool.
-2 - see example [here](https://github.com/Winwisly100/bootstrap/blob/master/tool/googlesheet/config/i18nconfig.yml)
+`i18n gsheet <flag>`
+
+1 - You should have a file `config/i18nconfig.yml` in the location where you run the i18n tool.
+2 - see example [here](https://github.com/Winwisly100/bootstrap/blob/master/tool/i18n/config/i18nconfig.yml)
 3 - The extension field can have handel `.json`, `.arb` or `.toml`
-4 - Run ./googlesheet -option=i18n
+4 - Run ./i18n gsheet -option=lang
 
 ## Status
 
 The API and data format will change as we are extending it currently.
-
 
 
 ## Use Cases

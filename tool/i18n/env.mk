@@ -1,10 +1,10 @@
 GO111MODULE=on
 
-LIB_BIN_NAME=googlesheet
+LIB_BIN_NAME=i18n
 LIB_BIN_FSPATH=$(GOPATH)/bin/$(LIB_BIN_NAME)
 
 
-CLOUD_PROJECT_ID=winwisely-cloudrun-googlesheet
+CLOUD_PROJECT_ID=winwisely-cloudrun-i18n
 
 # URL created from cloud-deploy
 CLOUD_PROJECT_URL=????

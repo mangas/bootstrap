@@ -31,15 +31,15 @@ func arbFiles(csvFileContent [][]string, config config.Config, cleanTagsDir, cle
 			if err != nil {
 				return err
 			}
-			cleanedData = cleanData(row[index], cleanTagsDir, cleanTagsFileName)
+			cleanedData = utils.CleanData(row[index], cleanTagsDir, cleanTagsFileName)
 
 			m := linkedhashmap.New()
-			m.Put("description", cleanKey(row[0]))
+			m.Put("description", utils.CleanKey(row[0]))
 			m.Put("type", "text")
 			m.Put("placeholders", "{}")
 
-			languages.Put(cleanKey(row[0]), cleanedData)
-			languages.Put("@"+cleanKey(row[0]), m)
+			languages.Put(utils.CleanKey(row[0]), cleanedData)
+			languages.Put("@"+utils.CleanKey(row[0]), m)
 		}
 		data, err := jsonify(languages)
 		data = pretty.Pretty(data)
@@ -66,8 +66,8 @@ func jsonFiles(csvFileContent [][]string, config config.Config, cleanTagsDir, cl
 			if err != nil {
 				return err
 			}
-			cleanedData = cleanData(row[index], cleanTagsDir, cleanTagsFileName)
-			languages[cleanKey(row[0])] = cleanedData
+			cleanedData = utils.CleanData(row[index], cleanTagsDir, cleanTagsFileName)
+			languages[utils.CleanKey(row[0])] = cleanedData
 			// j := jsonMap{cleanKey(row[0]): cleanedData}
 			// languages = append(languages, j)
 		}
@@ -99,7 +99,7 @@ func tomlFiles(csvFileContent [][]string, config config.Config, cleanTagsDir, cl
 				return err
 			}
 
-			cleanedData = cleanData(row[index], cleanTagsDir, cleanTagsFileName)
+			cleanedData = utils.CleanData(row[index], cleanTagsDir, cleanTagsFileName)
 
 			h := TomlFormat{}
 			if strings.Contains(row[0], "(") && config.Extension == ".toml" {
@@ -111,17 +111,17 @@ func tomlFiles(csvFileContent [][]string, config config.Config, cleanTagsDir, cl
 
 				// if there is already a object with the same key in cache
 				// get index from cache and append to to values array
-				if i, ok := cache[cleanKey(sp[0])]; ok {
+				if i, ok := cache[utils.CleanKey(sp[0])]; ok {
 
 					val := []string{sp2[1], cleanedData}
 					languages[i].Values = append(languages[i].Values, val)
 					continue
 				}
 
-				h = TomlFormat{Key: cleanKey(sp[0]), Values: [][]string{{sp2[1], cleanedData}}}
+				h = TomlFormat{Key: utils.CleanKey(sp[0]), Values: [][]string{{sp2[1], cleanedData}}}
 
 			} else {
-				h = TomlFormat{Key: cleanKey(row[0]), Values: [][]string{{"other", cleanedData}}}
+				h = TomlFormat{Key: utils.CleanKey(row[0]), Values: [][]string{{"other", cleanedData}}}
 			}
 
 			languages = append(languages, h)

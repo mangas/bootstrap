@@ -28,5 +28,5 @@ func TestTranslate(t *testing.T) {
 }
 
 func TestGenerateMultiLanguagesFilesFromFiles(t *testing.T) {
-	fmt.Println(GenerateMultiLanguagesFilesFromFiles(".", ".", "json", "arb", false))
+	// fmt.Println(GenerateMultiLanguagesFilesFromFiles(".", ".", "json", "arb", false))
 }

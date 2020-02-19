@@ -1,60 +1,82 @@
 package services
 
 import (
-	"encoding/json"
-	"os"
+	"log"
 	"strings"
+	"time"
 
+	"github.com/bregydoc/gtranslate"
 	"github.com/emirpasic/gods/maps/linkedhashmap"
-	"github.com/getcouragenow/bootstrap/tool/i18n/utils"
 )
 
-// CleanTranslation struct used to clean hugo translations files
-type CleanTranslation struct {
-	Error *string `json:"error"`
-	Fix   *string `json:"fix"`
+// TranslatedMaps struct
+type TranslatedMaps struct {
+	Langs []string
+	Maps  []*linkedhashmap.Map
 }
 
-func cleanData(data string, tagsFileDir, tagsFileName string) string {
-	cleanedData := data
-
-	cleanTags, _ := getCleanTranslationTags(tagsFileDir, tagsFileName)
-
-	for _, tag := range cleanTags {
-		cleanedData = strings.ReplaceAll(cleanedData, *tag.Error, *tag.Fix)
-	}
-	// for tagIndex, tag := range tagsToRemove {
-	// 	cleanedData = strings.ReplaceAll(cleanedData, tag, tagsToReplace[tagIndex])
-	// }
-	return cleanedData
+// Translate struct
+type Translate struct {
+	Lang  string
+	Words string
 }
 
-func cleanKey(key string) string {
-	return strings.ReplaceAll(key, ".", "_")
+// ArbAttr struct
+type ArbAttr struct {
+	Description  string            `json:"description"`
+	Type         string            `json:"type"`
+	Placeholders map[string]string `json:"placeholders"`
 }
 
-func getCleanTranslationTags(fileDir, fileName string) ([]*CleanTranslation, error) {
+// translate a string from languages to language
+func getTemplateWords(m *linkedhashmap.Map, delay time.Duration, tries int, fromLang, sep string, languages []string) ([]Translate, error) {
 
-	filePath, err := utils.GetAbsoluteFilePath(fileDir, fileName)
+	words := getTranslateWords(m, sep)
+	wordsTranslated := []Translate{}
+	for _, lang := range languages {
 
-	if err != nil {
-		return nil, err
+		t := Translate{}
+		out, err := gtranslate.TranslateWithParams(words,
+			gtranslate.TranslationParams{
+				From:  fromLang,
+				To:    lang,
+				Tries: tries,
+				Delay: delay,
+			})
+		if err != nil {
+			log.Printf("Error to translate from %s to %s\n", fromLang, lang)
+		}
+		t.Lang = lang
+		t.Words = out
+		wordsTranslated = append(wordsTranslated, t)
 	}
+	return wordsTranslated, nil
+}
 
-	f, err := os.Open(filePath)
+func getTranslatedMaps(sep string, WordsTranslated []Translate, m *linkedhashmap.Map, full bool) (*TranslatedMaps, error) {
 
-	if err != nil {
-		return nil, err
+	translatedMaps := &TranslatedMaps{}
+	for _, tr := range WordsTranslated {
+		mapLang := linkedhashmap.New()
+		it := m.Iterator()
+		index := 0
+		words := strings.Split(tr.Words, sep)
+		for it.Next() {
+			if !strings.HasPrefix(it.Key().(string), "@") {
+				mapLang.Put(it.Key(), strings.TrimSpace(words[index]))
+				index++
+			} else {
+				if full {
+					mapLang.Put(it.Key(), it.Value())
+				}
+			}
+		}
+
+		translatedMaps.Maps = append(translatedMaps.Maps, mapLang)
+		translatedMaps.Langs = append(translatedMaps.Langs, tr.Lang)
+
 	}
-
-	cleanData := []*CleanTranslation{}
-
-	err = json.NewDecoder(f).Decode(&cleanData)
-	if err != nil {
-		return nil, err
-	}
-
-	return cleanData, nil
+	return translatedMaps, nil
 }
 
 func getTranslateWords(m *linkedhashmap.Map, sep string) string {

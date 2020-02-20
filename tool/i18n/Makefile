@@ -19,6 +19,11 @@ help:  ## Display this help
 print: ## print
 
 	@echo
+	@echo SELF_DIR: $($(SELF_DIR))
+	
+	@echo
+
+	@echo
 	@echo LIB_BIN_NAME: $(LIB_BIN_NAME)
 	@echo LIB_BIN_FSPATH: $(LIB_BIN_FSPATH)
 	@echo

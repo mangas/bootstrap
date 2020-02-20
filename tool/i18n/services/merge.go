@@ -26,7 +26,7 @@ func mergeCell(csvFileContent [][]string, config config.Config, cleanTagsDir, cl
 				outFile = strings.ReplaceAll(config.FileName, "XXX", col) + config.Extension
 			}
 
-			cleanedData := cleanData(row[index], cleanTagsDir, cleanTagsFileName)
+			cleanedData := utils.CleanData(row[index], cleanTagsDir, cleanTagsFileName)
 			err = writeOutFile(cleanedData, outDir+outFile)
 
 			if err != nil {

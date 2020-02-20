@@ -72,7 +72,7 @@ gsheet-open: ## gsheet-open
 
 ### build
 build: ## build ****
-	go build -o $(LIB_BIN_FSPATH) .
+	go build -o $(LIB_BIN_NAME) .
 
 build-clean:
 	# go stuff

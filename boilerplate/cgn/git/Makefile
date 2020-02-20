@@ -19,11 +19,11 @@ dockerhub_push:
 git-upstream-open: 
 	open https://github.com/$(UPSTREAM_ORG)/$(REPO_NAME).git 
 
-## Open the Fork git repo ( if using from a fork)
+## Open the Fork git repo ( if using from a fork).
 git-fork-open: 
 	open https://github.com/$(FORK_ORG)/$(REPO_NAME).git
 
-## Setup the fork repo to track the Upstream git repo.
+## Setup a forked repo to track the Upstream git repo.
 git-fork-setup: 
 	# Pre: you git forked ( via web) and git cloned (via ssh)
 	# add upstream repo

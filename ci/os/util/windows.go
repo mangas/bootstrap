@@ -2,20 +2,34 @@ package util
 
 import (
 	"bytes"
-	"fmt"
-	"os"
+	"errors"
 	"os/exec"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/magefile/mage/mg"
+	"github.com/magefile/mage/sh"
 )
 
+var (
+	winEnv = []string{
+		"GO111MODULE on",
+		"scoopApps C:\\Users\\%username%\\scoop\\apps",
+		"GOPATH %scoopApps%/go",
+		"GOBIN %GOPATH%/bin",
+		"%PATH%;%GOBIN%",
+	}
+)
+
+// Windows namespace
 type Windows mg.Namespace
 
+// PowerShell struct
 type PowerShell struct {
 	powerShell string
 }
 
+// New powershell
 func New() *PowerShell {
 	ps, _ := exec.LookPath("powershell.exe")
 	return &PowerShell{
@@ -23,6 +37,7 @@ func New() *PowerShell {
 	}
 }
 
+// Execute cmd on shell
 func (p *PowerShell) Execute(args ...string) (stdOut string, stdErr string, err error) {
 	args = append([]string{"-NoProfile", "-NonInteractive"}, args...)
 	cmd := exec.Command(p.powerShell, args...)
@@ -36,71 +51,91 @@ func (p *PowerShell) Execute(args ...string) (stdOut string, stdErr string, err 
 	stdOut, stdErr = stdout.String(), stderr.String()
 	return
 }
+
+// InstallDependency install deps
 func (Windows) InstallDependency() {
 	var err error
 	posh := New()
 	//	var stdout,stderr string
 	_, _, err = posh.Execute("Set-ExecutionPolicy RemoteSigned -scope CurrentUser")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop update")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install aria2")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop bucket add extras")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install git")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install which")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install make")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install vscode")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install protobuf")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install gcc")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install go")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
 	_, _, err = posh.Execute("scoop install flutter")
-	color.Red(err.Error())
+	if err != nil {
+		color.Red(err.Error())
+	}
 
-	setEnvVars()
+	setEnvVarsWindows()
 }
 
-func setEnvVars() {
+func setEnvVarsWindows() error {
 
-	if err := exec.Command("setx", "scoopApps", "C:\\Users\\%username%\\scoop\\apps").Run(); err != nil {
-		fmt.Println("Error to set scoopApps:", err)
+	for _, env := range winEnv {
+		args := strings.Split(env, " ")
+		err := sh.RunV("setx", args...)
+		if err != nil {
+			return errors.New("Error to export env variable: " + err.Error())
+		}
 	}
 
-	if os.Getenv("GOPATH") == "" {
-		if err := exec.Command("setx", "GOPATH", "%scoopApps%/go").Run(); err != nil {
-			fmt.Println("Error to set GOPATH:", err)
-		}
-	}
-	if os.Getenv("GOBIN") == "" {
-		if err := exec.Command("setx", "GOBIN", "%GOPATH%/bin").Run(); err != nil {
-			fmt.Println("Error to set GOBIN:", err)
-		}
-		if err := exec.Command("setx", "%PATH%;%GOBIN%").Run(); err != nil {
-			fmt.Println("Error to set GOBIN PATH:", err)
-		}
-	}
+	return nil
 }
 
 //https://stackoverflow.com/questions/50809752/golang-invoking-powershell-exe-always-returns-ascii-characters

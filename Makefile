@@ -64,7 +64,7 @@ boilerplate-update:
 ## Build the code
 build:
 	@echo Building
-	@go build -v .
+	@go build -v -o bs .
 
 ## Run the code
 run:

@@ -1,7 +1,6 @@
 package build
 
 import (
-	u "github.com/getcouragenow/bootstrap/ci/utils"
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 )
@@ -11,24 +10,21 @@ var projectName = "Bootstrap"
 // Build namespace
 type Build mg.Namespace
 
-// Windows build binary for windows(amd64)
+// Windows bootstrap binary for windows(amd64)
 func (Build) Windows() {
-	build("windows", "amd64")
+	build("windows", "amd64", "bs.exe")
 }
 
-// Mac build binary for mac darwin (amd64)
+// Mac binary bootstrap for mac darwin (amd64)
 func (Build) Mac() {
-	build("darwin", "amd64")
+	build("darwin", "amd64", "bs")
 }
 
-// Linux build binary for linux (amd64)
+// Linux bootstrap binary for linux (amd64)
 func (Build) Linux() {
-	build("linux", "amd64")
+	build("linux", "amd64", "bs")
 }
 
-func build(goos, goarch string) {
-	env := u.FlagEnv(projectName)
-	env["GOOS"] = goos
-	env["GOARCH"] = goarch
-	sh.RunWith(env, "go", "build", ".")
+func build(goos, goarch, out string) {
+	sh.RunV("mage", "-compile", out, "-goos", goos, "-goarch", goarch)
 }

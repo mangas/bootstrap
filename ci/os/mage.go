@@ -3,7 +3,7 @@ package dep
 import (
 	"os"
 
-	mageutil "github.com/getcouragenow/bootstrap/ci/dep/util"
+	mageutil "github.com/getcouragenow/bootstrap/ci/os/util"
 	"github.com/magefile/mage/mg"
 )
 
@@ -12,22 +12,22 @@ var curDir = func() string {
 	return name
 }()
 
-// Dep namespace
-type Dep mg.Namespace
+// OS namespace
+type OS mg.Namespace
 
 // InstallWindows install windows Dependencies.
-func (Dep) InstallWindows() {
+func (OS) InstallWindows() {
 	mageutil.Windows{}.InstallDependency()
 
 }
 
 // InstallLinux install linux Dependencies.
-func (Dep) InstallLinux() {
+func (OS) InstallLinux() {
 	mageutil.Linux{}.InstallDependency()
 	// fmt.Println("Not yet ready")
 }
 
 // InstallMac install Mac Dependencies.
-func (Dep) InstallMac() {
+func (OS) InstallMac() {
 	mageutil.Mac{}.InstallDependency()
 }

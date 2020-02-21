@@ -96,6 +96,8 @@ display-coverage:
 	@echo Displaying test coverage
 	@go tool cover -html=cover.out
 
+## GIT-RELEASE
+
 ## Stage a release (usage: make release-tag VERSION={VERSION_TAG})
 git-release-tag: build fmt lint test
 	@echo Tagging release with version "${VERSION}"
@@ -109,4 +111,8 @@ git-release-tag: build fmt lint test
 git-release-push:
 	@echo Publishing release
 	@git push --follow-tags
+
+
+
+
 

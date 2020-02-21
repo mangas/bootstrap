@@ -1,39 +1,50 @@
 package servertools
 
 import (
+	"fmt"
+
+	"github.com/getcouragenow/bootstrap/ci/tools/gofish"
 	"github.com/magefile/mage/mg"
 	"github.com/magefile/mage/sh"
 )
 
-// ServerTools namespace
-type ServerTools mg.Namespace
+// STools namespace
+type STools mg.Namespace
 
-// InstallMinikube install minikube
-func (ServerTools) InstallMinikube() {
+// IMinikube install minikube
+func (STools) IMinikube() {
+	verbose("installing minikube....")
+	mg.Deps(gofish.Install)
 	sh.RunV("gofish", "install", "minikube")
 }
 
-// UninstallMinikube uninstall minikube
-func (ServerTools) UninstallMinikube() {
+// UMinikube uninstall minikube
+func (STools) UMinikube() {
 	sh.RunV("gofish", "uninstall", "minikube")
 }
 
-// InstallKubectl install kubectl
-func (ServerTools) InstallKubectl() {
+// IKubectl install kubectl
+func (STools) IKubectl() {
 	sh.RunV("gofish", "install", "kubectl")
 }
 
-// UninstallKubectl uninstall kubectl
-func (ServerTools) UninstallKubectl() {
+// UKubectl uninstall kubectl
+func (STools) UKubectl() {
 	sh.RunV("gofish", "uninstall", "kubectl")
 }
 
-// Installskaffold install skaffold
-func (ServerTools) Installskaffold() {
+// Iskaffold install skaffold
+func (STools) Iskaffold() {
 	sh.RunV("gofish", "install", "skaffold")
 }
 
-// Uninstallskaffold uninstall skaffold
-func (ServerTools) Uninstallskaffold() {
+// Uskaffold uninstall skaffold
+func (STools) Uskaffold() {
 	sh.RunV("gofish", "uninstall", "skaffold")
+}
+
+func verbose(msg string) {
+	if mg.Verbose() {
+		fmt.Println(msg)
+	}
 }

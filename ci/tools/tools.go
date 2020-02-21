@@ -4,6 +4,7 @@ import (
 	"github.com/getcouragenow/bootstrap/ci/tools/gofish"
 	"github.com/getcouragenow/bootstrap/ci/tools/hover"
 	"github.com/getcouragenow/bootstrap/ci/tools/hugo"
+	"github.com/getcouragenow/bootstrap/ci/tools/mage"
 	mageselect "github.com/getcouragenow/bootstrap/ci/tools/mage_select"
 	"github.com/magefile/mage/mg"
 )
@@ -11,52 +12,47 @@ import (
 // Tools namespace
 type Tools mg.Namespace
 
-// HoverInstall install hover.
-func (Tools) HoverInstall() {
+// IHover install hover.
+func (Tools) IHover() {
 	hover.Install()
 }
 
-// HoverUninstall uninstall hover.
-func (Tools) HoverUninstall() {
+// UHover uninstall hover.
+func (Tools) UHover() {
 	hover.Uninstall()
 }
 
-// HugoInstall install hugo
-func (Tools) HugoInstall() {
+// IHugo install hugo
+func (Tools) IHugo() {
 	hugo.Install()
 }
 
-// HugoUninstall install hugo
-func (Tools) HugoUninstall() {
+// UHugo install hugo
+func (Tools) UHugo() {
 	hugo.Uninstall()
 }
 
-// MageInstall install mage
-func (Tools) MageInstall() {
-	hugo.Install()
+// IMage install mage
+func (Tools) IMage() {
+	mage.Install()
 }
 
-// MageSelectInstall install mage_select
-func (Tools) MageSelectInstall() {
+// IMageSelect install mage_select
+func (Tools) IMageSelect() {
 	mageselect.Install()
 }
 
-// MageSelectUninstall uninstall mage_select
-func (Tools) MageSelectUninstall() {
+// UMageSelect uninstall mage_select
+func (Tools) UMageSelect() {
 	mageselect.Uninstall()
 }
 
-// GofishInstall install gofish
-func (Tools) GofishInstall() {
+// IGofish install gofish
+func (Tools) IGofish() {
 	gofish.Install()
 }
 
-// GofishUninstall uninstall gofish
-func (Tools) GofishUninstall() {
-	gofish.Uninstall()
-}
-
-// MageSelectUpdate uninstall mage_select
+// MageSelectUpdate update mage_select
 func (Tools) MageSelectUpdate() {
 	mageselect.Update()
 }

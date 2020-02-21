@@ -11,11 +11,7 @@ require (
 	github.com/getcouragenow/bootstrap/tool/googlesheet v0.0.0-20200216153739-62b1c832988f
 	github.com/getcouragenow/bootstrap/tool/i18n v0.0.0-20200219164813-03b382fcbb1f // indirect
 	github.com/go-flutter-desktop/go-flutter v0.35.1 // indirect
-<<<<<<< HEAD
-	github.com/go-flutter-desktop/hover v0.39.0 // indirect
-=======
 	github.com/go-flutter-desktop/hover v0.39.0
->>>>>>> upstream/master
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/gobuffalo/envy v1.9.0 // indirect
 	github.com/gohugoio/hugo v0.64.0
@@ -26,11 +22,7 @@ require (
 	github.com/relvacode/iso8601 v0.0.0-20181221151331-e9cae14c704e
 	github.com/rotisserie/eris v0.1.1
 	github.com/spf13/cast v1.3.1
-<<<<<<< HEAD
-	github.com/spf13/cobra v0.0.6 // indirect
-=======
 	github.com/spf13/cobra v0.0.5
->>>>>>> upstream/master
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	github.com/vova616/screenshot v0.0.0-20191005130345-da36db2560ab // indirect
 	golang.org/x/net v0.0.0-20200219183655-46282727080f // indirect

@@ -15,19 +15,19 @@ var curDir = func() string {
 // OS namespace
 type OS mg.Namespace
 
-// InstallWindows install windows Dependencies.
-func (OS) InstallWindows() {
+// Win install windows Dependencies.
+func (OS) Win() {
 	mageutil.Windows{}.InstallDependency()
 
 }
 
-// InstallLinux install linux Dependencies.
-func (OS) InstallLinux() {
+// Linux install linux Dependencies.
+func (OS) Linux() {
 	mageutil.Linux{}.InstallDependency()
 	// fmt.Println("Not yet ready")
 }
 
-// InstallMac install Mac Dependencies.
-func (OS) InstallMac() {
+// Mac install Mac Dependencies.
+func (OS) Mac() {
 	mageutil.Mac{}.InstallDependency()
 }

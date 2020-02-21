@@ -56,7 +56,7 @@ func Install() {
 		log.Fatal(err)
 	}
 
-	cmd := exec.Command("git", "clone", "ssh://git@github.com/magefile/mage.git")
+	cmd := exec.Command("git", "clone", "https://github.com/magefile/mage.git")
 	cmd.Stderr = os.Stderr
 
 	err = cmd.Run()

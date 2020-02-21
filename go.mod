@@ -16,6 +16,7 @@ require (
 	github.com/gobuffalo/envy v1.9.0 // indirect
 	github.com/gohugoio/hugo v0.64.0
 	github.com/iwittkau/mage-select v1.0.1
+	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381 // indirect
 	github.com/magefile/mage v1.9.0
 	github.com/pkg/errors v0.9.1
 	github.com/relvacode/iso8601 v0.0.0-20181221151331-e9cae14c704e
@@ -24,5 +25,7 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	github.com/vova616/screenshot v0.0.0-20191005130345-da36db2560ab // indirect
+	golang.org/x/net v0.0.0-20200219183655-46282727080f // indirect
 	golang.org/x/text v0.3.2
+	gopkg.in/yaml.v2 v2.2.8 // indirect
 )

@@ -2,10 +2,8 @@ package gsheet
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/magefile/mage/mg"
-	"github.com/magefile/mage/sh"
 )
 
 // mage:import
@@ -17,24 +15,25 @@ var platforms = []string{"windows/amd64", "linux/amd64", "darwin/amd64"}
 
 // Build googlesheet tool.
 func (Gsheet) Build() {
-	err := os.Chdir("./tool/googlesheet")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
+	fmt.Println("Todo")
+	// err := os.Chdir("./tool/i18n")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
 
-	err = sh.Run("go", "build", ".", "&&", "mv", "./googlesheet", "../../")
+	// err = sh.Run("go", "build", ".", "&&", "mv", "./i18n", "../../")
 
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	err = os.Chdir("../../")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	err = sh.Run("ls")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	// err = os.Chdir("../../")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// 	return
+	// }
+	// err = sh.Run("ls")
 }
 
 // // Run googlesheet Tests.

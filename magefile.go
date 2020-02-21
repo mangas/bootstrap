@@ -4,32 +4,14 @@ package main
 
 import (
 	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/gsheet"
+	_ "github.com/getcouragenow/bootstrap/ci/os"
 
 	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/cloud"
+	_ "github.com/getcouragenow/bootstrap/ci/tools"
 
 	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/dep"
+	_ "github.com/getcouragenow/bootstrap/ci/server_tools"
 
 	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/mage_select"
-
-	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/hugo"
-
-	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/bootstrap"
-
-	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/hover"
-
-	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/git"
-
-	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/flutter"
-
-	// mage:import
-	_ "github.com/getcouragenow/bootstrap/ci/build"
+	_ "github.com/getcouragenow/bootstrap/ci/help"
 )

@@ -1,20 +1,14 @@
 package hover
 
 import (
-	"fmt"
 	"log"
 	"os"
 
-	u "github.com/getcouragenow/bootstrap/ci/utils"
-	"github.com/magefile/mage/mg"
+	"github.com/getcouragenow/bootstrap/ci/utils"
 	"github.com/magefile/mage/sh"
 )
 
-// Hover namespace
-type Hover mg.Namespace
-
 var (
-	home         = ""
 	goPath       = ""
 	goBin        = ""
 	libName      = "hover"
@@ -27,27 +21,23 @@ var (
 )
 
 func init() {
-	path, err := u.GetPath()
+	p, _ := utils.GetPath()
 
-	if err != nil {
-		log.Fatal("Error Could not get go path infos:", err)
-	}
+	goPath = p["GOPATH"]
+	goBin = p["GOBIN"]
 
-	home = path["HOME"]
-	goPath = path["GOPATH"]
-	goBin = path["GOBIN"]
 	lib = "github.com/go-flutter-desktop/" + libName
 	libFSPATH = goPath + "/src/" + lib
 	libBinFSPATH = goPath + "/bin/" + linBinName
-
-	fmt.Println(libFSPATH)
 }
 
-// Install hover.
-func (Hover) Install() {
-
+// Install hover
+func Install() {
+	if utils.CheckIfAlreadInstalled(libName) {
+		return
+	}
 	// clone repo
-	err := u.GitClone(lib, libName, libFSPATH, "")
+	err := utils.GitClone(lib, libName, libFSPATH, "")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,4 +45,9 @@ func (Hover) Install() {
 	// build hover
 	os.Chdir(libFSPATH)
 	sh.RunV("go", "build", "-o", libBinFSPATH, ".")
+}
+
+// Uninstall hover
+func Uninstall() {
+	sh.Run("go", "clean", "-i", lib)
 }

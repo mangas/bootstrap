@@ -1,5 +1,3 @@
-# see: https://raw.githubusercontent.com/mtpereira/parede/fb38213a8dbdf98daffe35c895df14d05afe5e2b/.github/workflows/preview.yml
-
 name: Bootstrap
 on: [push]
 jobs:

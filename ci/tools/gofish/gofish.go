@@ -15,7 +15,7 @@ var (
 	goPath       = ""
 	goBin        = ""
 	libName      = "gofish"
-	lib          = ""
+	lib          = "github.com/fishworks/" + libName
 	libBranch    = "master"
 	libTag       = "latest"
 	libFSPATH    = ""
@@ -28,7 +28,6 @@ func init() {
 	goPath = p["GOPATH"]
 	goBin = p["GOBIN"]
 
-	lib = "github.com/fishworks/" + libName
 	libFSPATH = goPath + "/src/" + lib
 	libBinFSPATH = goPath + "/bin/" + libName
 }
@@ -51,7 +50,6 @@ func Install() {
 		if err != nil {
 			color.Red(err.Error())
 		}
-		return
 	} else {
 		// clone repo
 		err := utils.GitClone(lib, libName, libFSPATH, "")

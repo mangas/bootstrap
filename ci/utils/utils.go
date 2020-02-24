@@ -16,8 +16,6 @@ import (
 func CheckExeExists(exe string) (err error) {
 	path, err := exec.LookPath(exe)
 	if err != nil {
-		//fmt.Printf("didn't find '%s' executable\n", exe)
-		//return err
 		return eris.Wrapf(err, "didn't find '%s' executable\n", exe)
 	}
 	fmt.Printf("'%s' executable is '%s'\n", exe, path)

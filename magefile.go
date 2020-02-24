@@ -14,4 +14,7 @@ import (
 
 	// mage:import
 	_ "github.com/getcouragenow/bootstrap/ci/help"
+
+	// mage:import
+	_ "github.com/getcouragenow/bootstrap/ci/gen"
 )

@@ -30,10 +30,27 @@ Pluralisation
 
 `i18n gsheet <flag>`
 
-1 - You should have a file `config/i18nconfig.yml` in the location where you run the i18n tool.
-2 - see example [here](https://github.com/Winwisly100/bootstrap/blob/master/tool/i18n/config/i18nconfig.yml)
-3 - The extension field can have handel `.json`, `.arb` or `.toml`
-4 - Run ./i18n gsheet -option=lang
+1. You should have a file `config/i18nconfig.yml` in the location where you run the i18n tool.
+2. see example [here](https://github.com/Winwisly100/bootstrap/blob/master/tool/i18n/config/i18nconfig.yml)
+3. The extension field can have handel `.json`, `.arb` or `.toml`
+4. Run ./i18n gsheet -option=lang
+
+`i18n flutter <flag>`
+
+
+1. Generate full json files from an arb template file, example:
+`i18n flutter --dir examples --template examples/intl.arb --prefix stock --languages en,fr,es,de -f`
+
+2. then to generate arb files from all json files already generated run:
+`i18n flutter --dir examples`
+
+Or
+
+1. Generate json minnimum files from an arb template file, example:
+`i18n flutter --dir examples --template examples/intl.arb --prefix stock --languages en,fr,es,de`
+2. then to generate full arb files from all json files already generated run:
+`i18n flutter --dir examples -f`
+
 
 ## Status
 

@@ -1,0 +1,9 @@
+{
+  "@@last_modified": "2020-02-25T19:41:26.345103",
+  "mockText": "میں متن کا ترجمہ کرنے کے لئے ہوں ، اپنے فون کی ترتیبات میں زبان تبدیل کروں اور مجھے آزمائیں",
+  "@mockText": {
+    "description": "mock text for the application",
+    "placeholders": {},
+    "type": "text"
+  }
+}

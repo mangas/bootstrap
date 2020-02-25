@@ -1,0 +1,9 @@
+{
+  "@@last_modified": "2020-02-25T19:41:26.345103",
+  "mockText": "Im the text to get translated, change language in your phone settings, and try me",
+  "@mockText": {
+    "description": "mock text for the application",
+    "placeholders": {},
+    "type": "text"
+  }
+}

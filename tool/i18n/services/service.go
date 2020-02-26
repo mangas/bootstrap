@@ -19,7 +19,7 @@ func Service(option string) error {
 		processConfig(option)
 	case "datadump":
 		processConfig(option)
-	case "i18n":
+	case "hugo":
 		processConfig(option)
 	default:
 		log.Println("Invalid Option ", option)
@@ -70,7 +70,7 @@ func processConfig(option string) {
 					wg.Done()
 					return
 				}
-			case "i18n":
+			case "hugo":
 				cleanTagsDir := "./clean_translation_tags.json"
 				cleanTagsFileName := "clean_translation_tags.json"
 				err = services.WriteFiles(csvAbsFilePath, config, cleanTagsDir, cleanTagsFileName)

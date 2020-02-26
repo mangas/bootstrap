@@ -72,7 +72,7 @@ gsheet-open: ## gsheet-open
 
 ### build
 build: ## build ****
-	go build -o $(LIB_BIN_NAME) .
+	go build -o $(LIB_BIN_FSPATH) .
 
 build-clean:
 	# go stuff
@@ -85,14 +85,26 @@ build-clean:
 
 run-datadump: ## run-datadump
 	#rm -rf ./outputs
-	$(LIB_BIN_FSPATH) -option=datadump
+	$(LIB_BIN_FSPATH) gsheet -o datadump
 
 run-langdump: ## run-langdump
 	#rm -rf ./outputs
-	$(LIB_BIN_FSPATH) -option=lang
+	$(LIB_BIN_FSPATH) gsheet -o lang
 	
 run-hugo: ## run-langdump
 	#rm -rf ./outputs
-	$(LIB_BIN_FSPATH) -option=hugo
+	$(LIB_BIN_FSPATH) gsheet -o hugo
 
+i18n-full-json-flutter:
+	# generate full json files
+	$(LIB_BIN_FSPATH) flutter --dir examples --template examples/intl.arb --prefix stock --languages en,fr,es,de -f
 
+i18n-arb-flutter:
+	$(LIB_BIN_FSPATH) flutter --dir examples
+
+i18n-min-json-flutter:
+	# generate min json files
+	$(LIB_BIN_FSPATH) flutter --dir examples --template examples/intl.arb --prefix stock --languages en,fr,es,de
+
+i18n-full-arb-flutter:
+	$(LIB_BIN_FSPATH) flutter --dir examples -f

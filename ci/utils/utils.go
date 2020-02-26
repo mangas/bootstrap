@@ -1,13 +1,46 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"os/user"
 	"time"
 
 	"github.com/magefile/mage/sh"
+	"github.com/rotisserie/eris"
 )
+
+// CheckExeExists check if binary exist
+func CheckExeExists(exe string) (err error) {
+	path, err := exec.LookPath(exe)
+	if err != nil {
+		return eris.Wrapf(err, "didn't find '%s' executable\n", exe)
+	}
+	fmt.Printf("'%s' executable is '%s'\n", exe, path)
+	return nil
+}
+
+const (
+	envName = "MY_TEST_ENV_VARIABLE"
+)
+
+// RunEnvironTest env test
+func RunEnvironTest(envValue string) (err error) {
+	cmd := exec.Command("go", "run", "05-print-env-helper.go")
+	if envValue != "" {
+		newEnv := append(os.Environ(), fmt.Sprintf("%s=%s", envName, envValue))
+		cmd.Env = newEnv
+	}
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		log.Fatalf("cmd.Run() failed with %s\n", err)
+		return err
+	}
+	fmt.Printf("%s", out)
+	return nil
+}
 
 // FlagEnv flags used in build
 func FlagEnv(packageName string) map[string]string {
@@ -110,4 +143,14 @@ func GitPull(libFSPath, libBranch string) error {
 // GitClean delete git repo
 func GitClean(libFSPath string) error {
 	return sh.RunV("rm", "-rf", libFSPath)
+}
+
+// CheckIfAlreadInstalled check if binary is already installed
+func CheckIfAlreadInstalled(libName string) bool {
+	err := CheckExeExists(libName)
+	if err == nil {
+		fmt.Println("%s Already installed", libName)
+		return true
+	}
+	return false
 }

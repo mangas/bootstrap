@@ -14,6 +14,7 @@ include boilerplate/cgn/git/Makefile
 #include boilerplate/lyft/docker_build/Makefile
 #include boilerplate/lyft/golang_test_targets/Makefile
 
+
 # git
 REPO_NAME=$(notdir $(shell pwd))
 UPSTREAM_ORG=getcouragenow
@@ -115,4 +116,27 @@ git-release-push:
 
 
 
+### GIT-FORK
 
+#See: https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork
+
+git-upstream-open: ## git-upstream-open
+	open https://github.com/$(UPSTREAM_ORG)/$(REPO_NAME).git 
+	
+git-fork-open: ## git-fork-open
+	open https://github.com/$(FORK_ORG)/$(REPO_NAME).git
+
+git-status:
+	git status
+
+git-fork-setup: ## git-fork-setup
+	# Pre: you git forked ( via web) and git cloned (via ssh)
+	# add upstream repo
+	git remote add upstream git://github.com/$(UPSTREAM_ORG)/$(REPO_NAME).git
+
+git-fork-catchup: ## git-fork-catchup
+	# This fetches the branches and their respective commits from the upstream repository.
+	git fetch upstream 
+
+	# This brings your fork's master branch into sync with the upstream repository, without losing your local changes.
+	git merge upstream/master

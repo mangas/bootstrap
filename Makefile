@@ -14,6 +14,7 @@ include boilerplate/cgn/git/Makefile
 #include boilerplate/lyft/docker_build/Makefile
 #include boilerplate/lyft/golang_test_targets/Makefile
 
+
 # git
 REPO_NAME=$(notdir $(shell pwd))
 UPSTREAM_ORG=getcouragenow
@@ -111,8 +112,5 @@ git-release-tag: build fmt lint test
 git-release-push:
 	@echo Publishing release
 	@git push --follow-tags
-
-
-
 
 

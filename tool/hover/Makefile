@@ -3,7 +3,7 @@
 LIB_NAME=hover
 LIB=github.com/go-flutter-desktop/$(LIB_NAME)
 LIB_BRANCH=master
-LIB_TAG=v0.37.0
+LIB_TAG=v0.39.0
 LIB_FSPATH=$(GOPATH)/src/$(LIB)
 
 LIB_BIN_NAME=$(LIB_NAME)

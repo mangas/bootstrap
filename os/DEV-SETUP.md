@@ -56,6 +56,22 @@ Host github.com-winwiselyXXX
 ```
 
 
+## when you fork
+
+add this to .git/config:
+````
+[user]
+	email = winwisely99@gmail.com
+````
+
+then:
+
+````
+make git-fork-setup
+````
+
+
+
 ## Install golang and then tools
 
 Its basically flutter and golang. If you already have these then your fine.

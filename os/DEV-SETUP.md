@@ -56,10 +56,16 @@ Host github.com-winwiselyXXX
 ```
 
 
-## Install OS tools
-
-In this folder are the tools you need.
+## Install golang and then tools
 
 Its basically flutter and golang. If you already have these then your fine.
 
-Also make sure you install hover in the Tools folder. See make file
+Dont forget to put in the right env variables. !!
+
+For mac. https://github.com/getcouragenow/bootstrap/blob/master/os/mac/.bashrc#L15
+For other OS's see folder for your OS.
+
+Then in Tools, you need hover and i18n.
+See: https://github.com/getcouragenow/bootstrap/tree/master/tool
+- run the make file for hover and i18n folders.
+

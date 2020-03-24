@@ -14,10 +14,10 @@ GO111MODULE=on
 
 
 #SAMPLE_NAME=stocks
-#SAMPLE_NAME=draggable_borderless
+SAMPLE_NAME=draggable_borderless
 
 # video plugin
-SAMPLE_NAME=texture_tutorial
+#SAMPLE_NAME=texture_tutorial
 
 SAMPLE_FSPATH=$(LIB_FSPATH)/$(SAMPLE_NAME)
 

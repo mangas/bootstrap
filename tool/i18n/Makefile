@@ -8,6 +8,11 @@ SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 #$(SELF_DIR)/.ci/common.mk:
 #	git submodule update --init --recursive
 
+## TODO
+# What order to run the flutter i18n in ?
+# Make file does not actually run the example and do the required translation things on it.
+# This was meant to be sorted ages ago.
+
 # Incldue your env.mk
 include $(SELF_DIR)/env.mk
 

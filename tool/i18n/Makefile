@@ -9,6 +9,7 @@ SELF_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 #	git submodule update --init --recursive
 
 ## TODO
+# Make it work with example.
 # What order to run the flutter i18n in ?
 # Make file does not actually run the example and do the required translation things on it.
 # This was meant to be sorted ages ago.
@@ -31,6 +32,8 @@ print: ## print
 	@echo
 	@echo LIB_BIN_NAME: $(LIB_BIN_NAME)
 	@echo LIB_BIN_FSPATH: $(LIB_BIN_FSPATH)
+	@echo SAMPLE_FSPATH: $(SAMPLE_FSPATH)
+	
 	@echo
 
 	@echo

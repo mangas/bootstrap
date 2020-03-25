@@ -3,6 +3,7 @@ GO111MODULE=on
 LIB_BIN_NAME=i18n
 LIB_BIN_FSPATH=$(GOPATH)/bin/$(LIB_BIN_NAME)
 
+SAMPLE_FSPATH=$(PWD)/examples/i18n_example
 
 CLOUD_PROJECT_ID=winwisely-cloudrun-i18n
 

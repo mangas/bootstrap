@@ -103,19 +103,14 @@ run-hugo: ## run-langdump
 	#rm -rf ./outputs
 	$(LIB_BIN_FSPATH) gsheet -o hugo
 
-# i18n
-# 1. ff
+# i18n tool
+# 1. make build ==> build i18n tool
+# 2. make i18n-full-json-flutter ==> generate translated json files
+# 3. make i18n-arb-flutter ==> convert json to arb
 
 i18n-full-json-flutter:
 	# generate full json files
-	cd $(SAMPLE_FSPATH) && $(LIB_BIN_FSPATH) flutter --dir examples --template examples/intl.arb --prefix stock --languages en,fr,es,de -f
+	$(LIB_BIN_FSPATH) flutter --dir examples/i18n_example/lib/i18n/generated/ --template examples/i18n_example/lib/i18n/generated/intl_messages.arb --prefix mockText --languages en,fr,es,ur -f
 
 i18n-arb-flutter:
-	$(LIB_BIN_FSPATH) flutter --dir examples
-
-i18n-min-json-flutter:
-	# generate min json files
-	$(LIB_BIN_FSPATH) flutter --dir examples --template examples/intl.arb --prefix stock --languages en,fr,es,de
-
-i18n-full-arb-flutter:
-	$(LIB_BIN_FSPATH) flutter --dir examples -f
+	$(LIB_BIN_FSPATH) flutter --dir examples/i18n_example/lib/i18n/generated/

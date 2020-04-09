@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
-      run: ./os/mac/bootstrap.sh
+      run: chmod +x ./os/mac/bootstrap.sh && ./os/mac/bootstrap.sh
   linux:
     runs-on: ubuntu-latest
     env:
@@ -29,4 +29,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run a one-line script
-      run: ./os/linux/bootstrap.sh
+      run: chmod +x ./os/mac/bootstrap.sh && ./os/linux/bootstrap.sh

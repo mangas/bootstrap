@@ -88,7 +88,6 @@ func Download(url string, filename string, timeout int64, sheet string, checkCSV
 
 	if resp.StatusCode != 200 {
 		log.Printf("%v : Response from the URL was %d, but expecting 200", sheet, resp.StatusCode)
-		log.Println(resp.StatusCode)
 		return errors.New("Response returned with a status different from 200")
 	}
 	if checkCSV {

@@ -46,18 +46,18 @@ EOF
 # Install brew 
 # https://brew.sh/
 
-# xcode-select --install
-# /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+xcode-select --install
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-# brew upgrade
+brew upgrade
 
 # git
-# brew install git
-# brew install hyperkit docker-machine-hyperkit minikube
+brew install git
+brew install hyperkit docker-machine-hyperkit minikube
 
 # vscode
 # https://www.code2bits.com/how-to-install-visual-studio-code-on-macos-using-homebrew/
-# brew cask install visual-studio-code
+brew cask install visual-studio-code
 # MAY need to do this:
 # tell vscode where git is:
 # which git
@@ -65,36 +65,36 @@ EOF
 # restart and then do: code .
 
 # go
-# brew install go
+brew install go
 
 # protoc
-# brew install protobuf
+brew install protobuf
 
 # gcc
 # needed for golang CGO etc.
-# brew install gcc
-# brew install coreutils
+brew install gcc
+brew install coreutils
 
 # flutter IOS stuff
-# brew install --HEAD libimobiledevice
-# brew install ideviceinstaller ios-deploy cocoapods
-# pod setup
+brew install --HEAD libimobiledevice
+brew install ideviceinstaller ios-deploy cocoapods
+pod setup
 
 # sometimes needed
 # brew upgrade cocoapods
 
 # flutter
 # needs a fw other things first
-# brew cask install adoptopenjdk8
-# brew cask install android-studio
+brew cask install adoptopenjdk8
+brew cask install android-studio
 
 # flutter
 # using tarball
-# curl -o $HOME/flutter.tar.xz -L "https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_macos_v1.12.13+hotfix.9-stable.tar.xz"
-# tar -xvf $HOME/flutter.tar.xz 
-# ./flutter/bin/flutter channel beta
-# ./flutter/bin/flutter upgrade && ./flutter/bin/flutter --enable-web
-# yes | ./flutter/bin/flutter --android-licenses
+curl -o $HOME/flutter.tar.xz -L "https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_macos_v1.12.13+hotfix.9-stable.tar.xz"
+tar -xvf $HOME/flutter.tar.xz 
+./flutter/bin/flutter channel beta
+./flutter/bin/flutter upgrade && ./flutter/bin/flutter --enable-web
+yes | ./flutter/bin/flutter --android-licenses
 ## activate protobuf
 pub global activate protoc_plugin
 # ./flutter/bin/flutter doctor

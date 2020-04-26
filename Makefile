@@ -67,6 +67,10 @@ build:
 	@echo Building
 	@go build -v -o bs .
 
+install:
+	@echo Installing to ${GOPATH}
+	@install -Dm755 bs ${GOBIN}/
+
 ## Run the code
 run:
 	@echo Running

@@ -17,3 +17,7 @@
 
 # Dependency directories
 vendor/
+
+# Editor
+.idea
+bs

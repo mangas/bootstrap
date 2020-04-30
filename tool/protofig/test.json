@@ -1,0 +1,9 @@
+{
+  "componentName": "MinioComponent",
+  "config": [
+    {
+      "accessKey": "test",
+      "secretKey": "test"
+    }
+  ]
+}

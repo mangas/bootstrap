@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package config;
+
+option go_package = ".:config";
+
+import "baseproto/baseproto.proto";
+
+message AppComponent {
+    MinioComponent minio_component = 1;
+    MaintemplateComponent maintemplate_component = 2;
+    WorkflowComponent workflow_component = 3;
+    GcpComponent gcp_component = 4;
+    JwtComponent jwt_component = 5;
+}
+
+message MinioComponent {
+    baseproto.Config minio_accesskey = 1;
+    baseproto.Config minio_secretkey = 2;
+}
+
+message MaintemplateComponent {
+    MinioComponent minio_access_secret = 1;
+    baseproto.Config minio_location = 2;
+    baseproto.Config minio_timeout = 3;
+    baseproto.Config minio_ssl = 4;
+    baseproto.Config minio_enckey = 5;
+    baseproto.Config minio_endpoint = 6;
+}
+
+message GcpComponent {
+    baseproto.Config gcp_user = 1;
+    baseproto.Config gcp_project = 2;
+    baseproto.Config gke_cluster = 3;
+    baseproto.Config gke_zone = 4;
+    baseproto.Config gke_email = 5;
+}
+
+message JwtComponent {
+    baseproto.Config private_key = 1;
+    baseproto.Config public_key = 2;
+}
+
+message WorkflowComponent {
+    GcpComponent gcp_component = 1;
+    baseproto.Config github_sha = 2;
+    baseproto.Config github_ref = 3;
+    baseproto.Config project = 4;
+    baseproto.Config registry_hostname = 5;
+    baseproto.Config url = 6;
+    baseproto.Config locales = 7;
+    baseproto.Config flutter_channel = 8;
+    baseproto.Config release_channel = 9;
+}
+

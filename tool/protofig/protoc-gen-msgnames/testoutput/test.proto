@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package wheelerdealin;
+
+service PlayerTransfer {
+  rpc Info(InfoCarReq) returns (InfoCarResp) {};
+  rpc Buy(BuyCarReq) returns (BuyCarResp) {};
+}
+
+message Err {
+  string reason = 1;
+}
+
+message InfoCarReq {
+  string id = 1;
+}
+
+message BuyCarResp {
+  bool success = 1;
+  Err err_reason = 2;
+}
+
+message BuyCarReq {
+  bool cash = 1;
+  bool credit = 2;
+}
+
+message InfoCarResp {
+  string id = 1;
+  string manufacturer = 2;
+  string year = 3;
+  double mileage = 4;
+  double price = 5;
+  Err err_reason = 6;
+}

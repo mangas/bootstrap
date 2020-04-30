@@ -27,7 +27,6 @@ VERSION ?= $(shell echo $(TAGGED_VERSION) | cut -c 2-)
 
 ## Show help
 help:
-	@echo 'Package eris provides a better way to handle errors in Go.'
 	@echo ''
 	@echo 'Usage:'
 	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
@@ -66,6 +65,11 @@ boilerplate-update:
 build:
 	@echo Building
 	@go build -v -o bs .
+
+## Build the code to gobin
+build:
+	@echo Building
+	@go build -v -o $(GOPATH)/bin/bs .
 
 ## Run the code
 run:

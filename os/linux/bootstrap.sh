@@ -1,23 +1,63 @@
-# upgrade
-apt-get upgrade
+#!/usr/bin/env bash 
 
-# curl
-apt-get install curl
+rm -rf $HOME/.{profile,bash_profile,zprofile}
+cat <<<EOF >>>${HOME}/.profile
+### GoLang ###
+GO111MODULE=on
+GOROOT=/usr/local/go
+# for gomobile & protoc-gen-go
+GOPATH=$HOME/go
+# flutter
+FLUTTER_PATH=$HOME/flutter/bin
+# dart 
+DART_HOMEPATH=$HOME/.pub-cache/bin
+# java
+JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+ANDROID_SDK=$HOME/.Android/sdk
+ANDROID_HOME=$ANDROID_SDK
+ANDROID_NDK=$ANDROID_SDK/ndk-bundle
+ANDROID_PLATFORM_TOOLS=$ANDROID_SDK/platform-tools
+ANDROID_TOOLS=$ANDROID_SDK/tools
 
-# unzip
-apt-get install unzip
+export GOROOT GO111MODULE GOPATH JAVA_HOME ANDROID_HOME ANDROID_SDK ANDROID_NDK ANDROID_PLATFORM_TOOLS ANDROID_TOOLS
+export PATH=$JAVA_HOME/bin:$DART_HOMEPATH:$GOPATH/bin:$FLUTTER_PATH:$GOROOT/bin:$PATH
+EOF
 
-# git
-apt-get install git
+cat <<<EOF >>>${HOME}/.bash_profile
+if [ -r ~/.profile]; then
+   source ~/.profile
+fi
+EOF
 
-# openssh
-apt-get install openssh-server
+
+
+type -q apt && {
+    sudo apt update && sudo apt dist-upgrade -y
+    sudo apt install -y curl unzip git openssh-server gcc openjdk-8-jdk flatpak qemu-kvm libvirt-bin virt-manager build-essentials protobuf-compiler libprotobuf-dev
+}
+
+type -q dnf || type -q yum && {
+    sudo dnf --refresh upgrade --best --allowerasing -y
+    sudo dnf install -y curl unzip git openssh-server gcc java-8-openjdk qemu-kvm qemu-img virt-manager libvirt libvirt-python libvirt-client virt-install virt-viewer bridge-utils protobuf-devel
+}
+
+mkdir -p $HOME/bin
+flatpak install flathub com.google.AndroidStudio
+
+cat <<< EOF >>> $HOME/bin/astudio
+#!/usr/bin/env bash
+flatpak run com.google.AndroidStudio
+EOF
+chmod +x $HOME/bin/astudio
 
 # go
 GOLANG_FILE=go1.13.4.linux-amd64.tar.gz
 curl https://dl.google.com/go/${GOLANG_FILE} -o ${GOLANG_FILE}
-tar -C /usr/local/ -xzf ${GOLANG_FILE}
+sudo tar -C /usr/local/ -xzf ${GOLANG_FILE}
 rm -f ${GOLANG_FILE}
+
+# setup gopath
+mkdir -p $HOME/go
 
 # protoc
 PROTOC_VERSION=3.10.1
@@ -26,14 +66,12 @@ curl https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOC_VER
 unzip -o protoc-${PROTOC_VERSION}-linux-x86_64.zip -d $GOPATH
 rm -f ${PROTOC_FILE}
 
-# gcc
-apt-get install gcc
-
-# flutter
-# needs a fw other things first
-apt-get install openjdk-8-jdk
-snap install android-studio
-
 # Flutter github
-git clone -b master https://github.com/flutter/flutter.git
-./flutter/bin/flutter --version
+curl -o $HOME/flutter.tar.xz -L "https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.12.13+hotfix.9-stable.tar.xz"
+tar -xvf $HOME/flutter.tar.xz 
+./flutter/bin/flutter channel beta
+./flutter/bin/flutter upgrade && ./flutter/bin/flutter --enable-web
+yes | ./flutter/bin/flutter --android-licenses
+## activate protobuf
+pub global activate protoc_plugin
+./flutter/bin/flutter doctor

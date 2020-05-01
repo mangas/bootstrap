@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package baseproto;
+package config;
 
-option go_package = "baseproto;baseproto";
+option go_package = ".;config";
 
 import "validate/validate.proto";
 
@@ -20,5 +20,6 @@ message ConfigVal {
         string email_val = 3 [(validate.rules).string.email = true];
         bytes cidr_val = 4 [(validate.rules).bytes.ip = true];
         bool bool_val = 5;
+        double double_val = 6;
     }
 }

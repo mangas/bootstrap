@@ -1,6 +1,5 @@
 # Readme
 
-Basic idea is to generate / spew config file from and to protobuf. 
+Install both protoc-gen-msgnames and protoc-gen-config (via `make install`)
 
-You can even create a protobuf schema from json file as long as it conforms
-to baseproto schema declaration.
+

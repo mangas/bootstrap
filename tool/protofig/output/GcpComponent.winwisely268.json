@@ -1,0 +1,17 @@
+{
+  "gcpUser": {
+    "stringVal": "REPLACE_THIS"
+  },
+  "gcpProject": {
+    "stringVal": "REPLACE_THIS"
+  },
+  "gkeCluster": {
+    "stringVal": "REPLACE_THIS"
+  },
+  "gkeZone": {
+    "stringVal": "REPLACE_THIS"
+  },
+  "gkeEmail": {
+    "emailVal": "test@example.com"
+  }
+}

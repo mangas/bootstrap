@@ -1,0 +1,14 @@
+{
+  "components": [
+    {
+      "componentName": "ConfigVal",
+      "config": {
+        "bool_val": false,
+        "cidr_val": "IPv4_or_IPv6_here",
+        "email_val": "test@example.com",
+        "string_val": "REPLACE_THIS",
+        "uint64_val": 0
+      }
+    }
+  ]
+}

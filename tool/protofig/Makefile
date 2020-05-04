@@ -22,4 +22,4 @@ proto-go: baseproto
 		config/config.proto
 
 test-json:
-	go run main.go -f ./test.json -o ./output
+	go run main.go -f ./test.json -o ./output -u $(shell git config user.name)

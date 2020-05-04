@@ -16,10 +16,24 @@ var (
 	user     string
 )
 
+type outputStruct struct {
+	cfg    *config.DefConfig
+	path   string
+	suffix string
+}
+
+func NewOutputStruct(cfg *config.DefConfig, path, suffix string) *outputStruct {
+	return &outputStruct{
+		cfg:    cfg,
+		path:   path,
+		suffix: suffix,
+	}
+}
+
 func main() {
-	flag.StringVar(&jsonFile, "f", "./test.json", "json file to decode/encode")
-	flag.StringVar(&outPath, "o", "./output", "json output validated against protobuf schema")
-	flag.StringVar(&user, "u", "winwisely268", "prefix to output files")
+	flag.StringVar(&jsonFile, "f", "", "json file to decode/encode")
+	flag.StringVar(&outPath, "o", "", "json output validated against protobuf schema")
+	flag.StringVar(&user, "u", "", "prefix to output files")
 	flag.Parse()
 
 	if jsonFile == "" {
@@ -53,20 +67,50 @@ func main() {
 		log.Fatalf("Error: unable to marshal to json: %v", err)
 	}
 
-	if err := createProtojsonOutput(&newAppConfig, outPath, user); err != nil {
-		log.Fatalf("Error: failure to create output files: %v", err)
+	newOutputStruct := NewOutputStruct(&newAppConfig, outPath, user)
+
+	if err = CreateOutputs(newOutputStruct); err != nil {
+		log.Fatalf("Error while creating output: %v", err)
 	}
+
 }
 
-func createProtojsonOutput(cfg *config.DefConfig, outpath, user string) (err error) {
-	for _, c := range cfg.AppConfig {
-		nb, err := c.ConfigCreateJSONMessage()
+func CreateOutputs(out *outputStruct) (err error) {
+	if err = out.createOutput(makeJsonConfig, writeFile, "json"); err != nil {
+		return err
+	}
+	if err = out.createOutput(makeSecretConfig, writeFile, "yaml"); err != nil {
+		return err
+	}
+	return out.createOutput(makeShellConfig, writeFile, "env")
+}
+
+func (o *outputStruct) createOutput(f func(c *config.Component) ([]byte, error), writeFunc func(string, []byte) error, format string) error {
+	for _, c := range o.cfg.AppConfig {
+		nb, err := f(&c)
 		if err != nil {
 			return err
 		}
-		if err = ioutil.WriteFile(fmt.Sprintf("%s/%s.%s.json", outpath, c.Name, user), nb, 0644); err != nil {
+		if err = writeFunc(
+			fmt.Sprintf("%s/%s.%s.%s", o.path, c.Name, o.suffix, format), nb); err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+func writeFile(path string, content []byte) error {
+	return ioutil.WriteFile(path, content, 0644)
+}
+
+func makeJsonConfig(c *config.Component) ([]byte, error) {
+	return c.ConfigToJSON()
+}
+
+func makeShellConfig(c *config.Component) ([]byte, error) {
+	return c.ConfigToShellEnv()
+}
+
+func makeSecretConfig(c *config.Component) ([]byte, error) {
+	return c.ConfigToK8sSecret()
 }

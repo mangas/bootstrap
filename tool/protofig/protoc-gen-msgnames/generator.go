@@ -127,6 +127,7 @@ func (p *protoapi) generateGoDefault() {
 		"toTitle":      strings.Title,
 		"toPascalCase": toPascalCase,
 		"yamlTpl":      getYamlTpl,
+		"shellTpl":     getShellTpl,
 	}
 	t, err := template.New(p.Fname).Funcs(fmap).Parse(gotpl)
 	if err != nil {
@@ -163,4 +164,8 @@ func toPascalCase(s string) string {
 
 func getYamlTpl(_ string) string {
 	return yamlTmpl
+}
+
+func getShellTpl(_ string) string {
+	return shellTpl
 }

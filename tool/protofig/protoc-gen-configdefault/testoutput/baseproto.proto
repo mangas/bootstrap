@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package config;
+
+option go_package = ".;config";
+
+message ConfigVal {
+    oneof val {
+        string string_val = 1;
+        uint64 uint64_val = 2;
+        string email_val = 3;
+        bytes cidr_val = 4;
+        bool bool_val = 5;
+    }
+}

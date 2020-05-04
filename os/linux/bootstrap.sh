@@ -1,7 +1,7 @@
 #!/usr/bin/env bash 
 
 rm -rf $HOME/.{profile,bash_profile,zprofile}
-cat <<<EOF >>>${HOME}/.profile
+cat ${HOME}/.profile
 ### GoLang ###
 GO111MODULE=on
 GOROOT=/usr/local/go
@@ -21,19 +21,15 @@ ANDROID_TOOLS=$ANDROID_SDK/tools
 
 export GOROOT GO111MODULE GOPATH JAVA_HOME ANDROID_HOME ANDROID_SDK ANDROID_NDK ANDROID_PLATFORM_TOOLS ANDROID_TOOLS
 export PATH=$JAVA_HOME/bin:$DART_HOMEPATH:$GOPATH/bin:$FLUTTER_PATH:$GOROOT/bin:$PATH
-EOF
 
-cat <<<EOF >>>${HOME}/.bash_profile
-if [ -r ~/.profile]; then
+cat ${HOME}/.bash_profile
+if [ -r ~/.profile ]; then
    source ~/.profile
 fi
-EOF
 
-
-
-type -q apt && {
-    sudo apt update && sudo apt dist-upgrade -y
-    sudo apt install -y curl unzip git openssh-server gcc openjdk-8-jdk flatpak qemu-kvm libvirt-bin virt-manager build-essentials protobuf-compiler libprotobuf-dev
+type apt && {
+    sudo apt update -y
+    sudo apt install -y curl unzip git openssh-server gcc openjdk-8-jdk flatpak qemu-kvm libvirt-dev virt-manager build-essential protobuf-compiler libprotobuf-dev
 }
 
 type -q dnf || type -q yum && {
@@ -42,12 +38,12 @@ type -q dnf || type -q yum && {
 }
 
 mkdir -p $HOME/bin
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub com.google.AndroidStudio
 
-cat <<< EOF >>> $HOME/bin/astudio
+cat $HOME/bin/astudio
 #!/usr/bin/env bash
 flatpak run com.google.AndroidStudio
-EOF
 chmod +x $HOME/bin/astudio
 
 # go

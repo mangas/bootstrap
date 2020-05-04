@@ -25,7 +25,6 @@ var (
 		{{ range .Messages }}"{{ .Name }}",
 		{{ end }}
 	}
-	{{ .Name }}YamlTpl = ` + "`" + `{{ "" | yamlTpl }}` + "`" + `
 )
 	
 func isUrl(str string) bool {
@@ -50,9 +49,9 @@ func {{ toTitle .Name }}HasMessageName(s string) bool {
 func (c *Component) {{ toTitle .Name }}CreateJSONMessage() ([]byte, error) {
 	switch c.Name {
 	{{ range .Messages}}case "{{ .Name }}":
-		msg, err := c.Create{{ .Name }}()
+		msg, err := c.create{{ .Name }}()
 		if err != nil { return nil, err }
-		return msg.MarshalJSON()
+		return msg.marshalJSON()
 	{{ end }}
 	default:
 		return nil, errors.New("component name is unknown")
@@ -63,7 +62,7 @@ func isSecret(s string) bool {
 	rxSecret := regexp.MustCompile("[k|K]ey")
 	return rxSecret.MatchString(s)
 }
-	
+
 func toConfigVal(i interface{}) (cfg *ConfigVal, err error) {
 	switch i.(type) {
 	case string:
@@ -116,7 +115,7 @@ func toConfigVal(i interface{}) (cfg *ConfigVal, err error) {
 		return nil, errors.New("Unknown value")
 	}
 }
-{{ range .Messages }}func (c *Component) Create{{ .Name }}() (*{{ .Name }}, error) {
+{{ range .Messages }}func (c *Component) create{{ .Name }}() (*{{ .Name }}, error) {
 	{{ range .Fields }}{{ .JsonKey }}, err := toConfigVal(c.Config["{{ .JsonKey }}"])
 	if err != nil {
 		return nil, err
@@ -129,7 +128,7 @@ func toConfigVal(i interface{}) (cfg *ConfigVal, err error) {
 }
 {{ end }}	
 	
-{{ range .Messages }}func (x *{{ .Name }}) MarshalJSON() ([]byte, error) {
+{{ range .Messages }}func (x *{{ .Name }}) marshalJSON() ([]byte, error) {
 	opt := protojson.MarshalOptions{
 		Multiline: true,
 		AllowPartial: true,
@@ -138,16 +137,11 @@ func toConfigVal(i interface{}) (cfg *ConfigVal, err error) {
 }
 {{ end }}
 	
-{{ range .Messages }}func (x *{{ .Name }}) UnmarshalJSON(b []byte) error {
+{{ range .Messages }}func (x *{{ .Name }}) unmarshalJSON(b []byte) error {
 	opt := protojson.UnmarshalOptions{
 		AllowPartial: true,
 	}
 	return opt.Unmarshal(b, x)
-}
-{{ end }}
-	
-{{ range .Messages }}func (x *{{ .Name }}) MarshalYAMLSecret() ([]byte, error) {
-	
 }
 {{ end }}
 `

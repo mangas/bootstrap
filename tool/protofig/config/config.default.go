@@ -26,15 +26,6 @@ var (
 		"WorkflowComponent",
 		
 	}
-	configYamlTpl = `apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ .Name }}
-type: Opaque
-data:
-  {{ range .Fields }}{{ .Key }}: {{ .Value | toB64 }}
-  {{ end }}	
-`
 )
 	
 func isUrl(str string) bool {
@@ -59,25 +50,25 @@ func ConfigHasMessageName(s string) bool {
 func (c *Component) ConfigCreateJSONMessage() ([]byte, error) {
 	switch c.Name {
 	case "MinioComponent":
-		msg, err := c.CreateMinioComponent()
+		msg, err := c.createMinioComponent()
 		if err != nil { return nil, err }
-		return msg.MarshalJSON()
+		return msg.marshalJSON()
 	case "MaintemplateComponent":
-		msg, err := c.CreateMaintemplateComponent()
+		msg, err := c.createMaintemplateComponent()
 		if err != nil { return nil, err }
-		return msg.MarshalJSON()
+		return msg.marshalJSON()
 	case "GcpComponent":
-		msg, err := c.CreateGcpComponent()
+		msg, err := c.createGcpComponent()
 		if err != nil { return nil, err }
-		return msg.MarshalJSON()
+		return msg.marshalJSON()
 	case "JwtComponent":
-		msg, err := c.CreateJwtComponent()
+		msg, err := c.createJwtComponent()
 		if err != nil { return nil, err }
-		return msg.MarshalJSON()
+		return msg.marshalJSON()
 	case "WorkflowComponent":
-		msg, err := c.CreateWorkflowComponent()
+		msg, err := c.createWorkflowComponent()
 		if err != nil { return nil, err }
-		return msg.MarshalJSON()
+		return msg.marshalJSON()
 	
 	default:
 		return nil, errors.New("component name is unknown")
@@ -88,7 +79,7 @@ func isSecret(s string) bool {
 	rxSecret := regexp.MustCompile("[k|K]ey")
 	return rxSecret.MatchString(s)
 }
-	
+
 func toConfigVal(i interface{}) (cfg *ConfigVal, err error) {
 	switch i.(type) {
 	case string:
@@ -141,7 +132,7 @@ func toConfigVal(i interface{}) (cfg *ConfigVal, err error) {
 		return nil, errors.New("Unknown value")
 	}
 }
-func (c *Component) CreateMinioComponent() (*MinioComponent, error) {
+func (c *Component) createMinioComponent() (*MinioComponent, error) {
 	minioAccesskey, err := toConfigVal(c.Config["minioAccesskey"])
 	if err != nil {
 		return nil, err
@@ -157,7 +148,7 @@ func (c *Component) CreateMinioComponent() (*MinioComponent, error) {
 	    
 	}, nil
 }
-func (c *Component) CreateMaintemplateComponent() (*MaintemplateComponent, error) {
+func (c *Component) createMaintemplateComponent() (*MaintemplateComponent, error) {
 	minioAccesskey, err := toConfigVal(c.Config["minioAccesskey"])
 	if err != nil {
 		return nil, err
@@ -198,7 +189,7 @@ func (c *Component) CreateMaintemplateComponent() (*MaintemplateComponent, error
 	    
 	}, nil
 }
-func (c *Component) CreateGcpComponent() (*GcpComponent, error) {
+func (c *Component) createGcpComponent() (*GcpComponent, error) {
 	gcpUser, err := toConfigVal(c.Config["gcpUser"])
 	if err != nil {
 		return nil, err
@@ -229,7 +220,7 @@ func (c *Component) CreateGcpComponent() (*GcpComponent, error) {
 	    
 	}, nil
 }
-func (c *Component) CreateJwtComponent() (*JwtComponent, error) {
+func (c *Component) createJwtComponent() (*JwtComponent, error) {
 	privateKey, err := toConfigVal(c.Config["privateKey"])
 	if err != nil {
 		return nil, err
@@ -245,7 +236,7 @@ func (c *Component) CreateJwtComponent() (*JwtComponent, error) {
 	    
 	}, nil
 }
-func (c *Component) CreateWorkflowComponent() (*WorkflowComponent, error) {
+func (c *Component) createWorkflowComponent() (*WorkflowComponent, error) {
 	githubSha, err := toConfigVal(c.Config["githubSha"])
 	if err != nil {
 		return nil, err
@@ -293,35 +284,35 @@ func (c *Component) CreateWorkflowComponent() (*WorkflowComponent, error) {
 }
 	
 	
-func (x *MinioComponent) MarshalJSON() ([]byte, error) {
+func (x *MinioComponent) marshalJSON() ([]byte, error) {
 	opt := protojson.MarshalOptions{
 		Multiline: true,
 		AllowPartial: true,
 	}
 	return opt.Marshal(x)
 }
-func (x *MaintemplateComponent) MarshalJSON() ([]byte, error) {
+func (x *MaintemplateComponent) marshalJSON() ([]byte, error) {
 	opt := protojson.MarshalOptions{
 		Multiline: true,
 		AllowPartial: true,
 	}
 	return opt.Marshal(x)
 }
-func (x *GcpComponent) MarshalJSON() ([]byte, error) {
+func (x *GcpComponent) marshalJSON() ([]byte, error) {
 	opt := protojson.MarshalOptions{
 		Multiline: true,
 		AllowPartial: true,
 	}
 	return opt.Marshal(x)
 }
-func (x *JwtComponent) MarshalJSON() ([]byte, error) {
+func (x *JwtComponent) marshalJSON() ([]byte, error) {
 	opt := protojson.MarshalOptions{
 		Multiline: true,
 		AllowPartial: true,
 	}
 	return opt.Marshal(x)
 }
-func (x *WorkflowComponent) MarshalJSON() ([]byte, error) {
+func (x *WorkflowComponent) marshalJSON() ([]byte, error) {
 	opt := protojson.MarshalOptions{
 		Multiline: true,
 		AllowPartial: true,
@@ -330,73 +321,34 @@ func (x *WorkflowComponent) MarshalJSON() ([]byte, error) {
 }
 
 	
-func (x *MinioComponent) UnmarshalJSON(b []byte) error {
+func (x *MinioComponent) unmarshalJSON(b []byte) error {
 	opt := protojson.UnmarshalOptions{
 		AllowPartial: true,
 	}
 	return opt.Unmarshal(b, x)
 }
-func (x *MaintemplateComponent) UnmarshalJSON(b []byte) error {
+func (x *MaintemplateComponent) unmarshalJSON(b []byte) error {
 	opt := protojson.UnmarshalOptions{
 		AllowPartial: true,
 	}
 	return opt.Unmarshal(b, x)
 }
-func (x *GcpComponent) UnmarshalJSON(b []byte) error {
+func (x *GcpComponent) unmarshalJSON(b []byte) error {
 	opt := protojson.UnmarshalOptions{
 		AllowPartial: true,
 	}
 	return opt.Unmarshal(b, x)
 }
-func (x *JwtComponent) UnmarshalJSON(b []byte) error {
+func (x *JwtComponent) unmarshalJSON(b []byte) error {
 	opt := protojson.UnmarshalOptions{
 		AllowPartial: true,
 	}
 	return opt.Unmarshal(b, x)
 }
-func (x *WorkflowComponent) UnmarshalJSON(b []byte) error {
+func (x *WorkflowComponent) unmarshalJSON(b []byte) error {
 	opt := protojson.UnmarshalOptions{
 		AllowPartial: true,
 	}
 	return opt.Unmarshal(b, x)
 }
 
-
-func (x *MinioComponent) MarshalYAML() ([]byte, error) {
-	type KVal struct {
-		Name string
-		
-	}
-}
-
-func (x *MaintemplateComponent) MarshalYAML() ([]byte, error) {
-	return nil, false
-}
-func (x *GcpComponent) MarshalYAML() ([]byte, error) {
-	return nil, false
-}
-func (x *JwtComponent) MarshalYAML() ([]byte, error) {
-	return nil, false
-}
-func (x *WorkflowComponent) MarshalYAML() ([]byte, error) {
-	return nil, false
-}
-
-	
-func (x *MinioComponent) UnmarshalYAML(b []byte) error {
-	return nil, false
-}
-func (x *MaintemplateComponent) UnmarshalYAML(b []byte) error {
-	return nil, false
-}
-func (x *GcpComponent) UnmarshalYAML(b []byte) error {
-	return nil, false
-}
-func (x *JwtComponent) UnmarshalYAML(b []byte) error {
-	return nil, false
-}
-func (x *WorkflowComponent) UnmarshalYAML(b []byte) error {
-	return nil, false
-}
-
-	

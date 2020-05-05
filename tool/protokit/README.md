@@ -1,4 +1,4 @@
-# FORK OF https://github.com/pseudomuto/protokit
+# FORK OF https://github.com/pseudomuto/protofit
 # protokit
 
 [![Travis Build Status][travis-svg]][travis-ci]

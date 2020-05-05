@@ -26,6 +26,7 @@ proto-go: baseproto
 
 ## Test protofig output in output directory using supplied test.json
 test-json:
+	mkdir -p ./output
 	go run main.go -f ./test.json -o ./output -u $(SUFFIX)
 
 print-mlist:

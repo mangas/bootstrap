@@ -4,11 +4,14 @@ go 1.13
 
 require (
 	github.com/dustin/go-humanize v1.0.0
+	github.com/envoyproxy/protoc-gen-validate v0.3.0 // indirect
 	github.com/fatih/color v1.9.0
 	github.com/go-flutter-desktop/hover v0.39.0
 	github.com/gohugoio/hugo v0.64.0
+	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334 // indirect
 	github.com/kataras/sheets v0.0.0-20200317152234-45c7a6f312b1
 	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381 // indirect
+	github.com/lyft/protoc-gen-star v0.4.14 // indirect
 	github.com/magefile/mage v1.9.0
 	github.com/rotisserie/eris v0.1.1
 	github.com/spf13/cast v1.3.1

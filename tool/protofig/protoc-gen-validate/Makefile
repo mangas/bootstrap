@@ -3,7 +3,7 @@
 LIB_NAME=protoc-gen-validate
 LIB=github.com/envoyproxy/$(LIB_NAME)
 LIB_BRANCH=master
-LIB_TAG=v0.3.0java
+LIB_TAG=v0.3.0-java
 LIB_FSPATH=$(GOPATH)/src/$(LIB)
 
 LIB_BIN_NAME=protoc-gen-validate
@@ -44,8 +44,7 @@ code:
 	code $(LIB_FSPATH)
 
 build: ## build
-	# builds into GO BIN
-	cd $(LIB_FSPATH)/cmd/sed-go && go build -o $(LIB_BIN_FSPATH) .
+	GO111MODULE=off && cd $(LIB_FSPATH) && $(MAKE) build
 
 build-clean: ## build-clean
 	rm $(LIB_BIN_FSPATH)

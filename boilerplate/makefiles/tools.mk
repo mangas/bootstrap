@@ -8,6 +8,29 @@ LIB_FSPATH=$(GOPATH)/src/$(LIB)
 LIB_BIN_NAME=bs
 LIB_BIN_FSPATH=$(GOPATH)/bin/$(LIB_BIN_NAME)
 
+GREEN  := $(shell tput -Txterm setaf 2)
+YELLOW := $(shell tput -Txterm setaf 3)
+WHITE  := $(shell tput -Txterm setaf 7)
+RESET  := $(shell tput -Txterm sgr0)
+
+## Show help
+help:
+	@echo ''
+	@echo 'Usage:'
+	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
+	@echo ''
+	@echo 'Targets:'
+	@awk '/^[a-zA-Z\-0-9_]+:/ { \
+		helpMessage = match(lastLine, /^## (.*)/); \
+		if (helpMessage) { \
+			helpCommand = substr($$1, 0, index($$1, ":")-1); \
+			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
+			printf "  ${YELLOW}%-$(TARGET_MAX_CHAR_NUM)s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
+		} \
+	} \
+	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+
+## Print environment
 print: ## print
 	@echo
 	@echo $(OS)
@@ -22,26 +45,14 @@ print: ## print
 	@echo LIB_BIN_FSPATH: $(LIB_BIN_FSPATH)
 	@echo
 
-git-clone:
-	mkdir -p $(LIB_FSPATH)
-	cd $(LIB_FSPATH) && cd .. && rm -rf $(LIB_NAME) && git clone ssh://git@$(LIB).git
-git-clone-master: git-clone ## git-clone-master
-	cd $(LIB_FSPATH) && git checkout $(LIB_BRANCH)
-git-clone-tag: git-clone ## git-clone-tag
-	cd $(LIB_FSPATH) && git checkout tags/$(LIB_TAG)
-	cd $(LIB_FSPATH) && git status
-git-pull:
-	cd $(LIB_FSPATH) && git pull
-git-clean:
-	rm -rf $(LIB_FSPATH)
 
-code:
-	code $(LIB_FSPATH)
 
+## Build binary to GOPATH/bin
 build: ## build
 	# builds into GO BIN
 	go build -o $(LIB_BIN_FSPATH) .
 
+## Clean generated binary
 build-clean: ## build-clean
 	rm $(LIB_BIN_FSPATH)
 

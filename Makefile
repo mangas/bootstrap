@@ -67,7 +67,7 @@ build:
 	@go build -v -o bs .
 
 ## Build the code to gobin
-build:
+build-global:
 	@echo Building
 	@go build -v -o $(GOPATH)/bin/bs .
 

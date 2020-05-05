@@ -1,9 +1,0 @@
-{
-  "@@last_modified": "2020-02-25T19:41:26.345103",
-  "mockText": "Im el texto para traducir, cambiar el idioma en la configuración de su teléfono y probarme",
-  "@mockText": {
-    "description": "mock text for the application",
-    "placeholders": {},
-    "type": "text"
-  }
-}

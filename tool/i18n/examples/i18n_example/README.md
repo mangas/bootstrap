@@ -1,16 +1,37 @@
 # i18n_example
 
-A new Flutter project.
+This is the i18n tool Flutter example.
 
-## Getting Started
+It won't compile until you add the translations for the first time.
 
-This project is a starting point for a Flutter application.
+# 1. Add new strings or change old ones
+To add new translation in the Flutter project, do it in lib/core/i18n/translations.dart
 
-A few resources to get you started if this is your first Flutter project:
+# 2. Transform strings from dart code into .arb file and translate them
+This is done with the Makefile
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+`make lang-gen-flu`
+or manually:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+``` 
+mkdir -p lib/core/i18n/generated/
+mkdir -p i18n/
+flutter pub run intl_translation:extract_to_arb --output-dir=i18n/ lib/core/i18n/translations.dart
+i18n flutter --dir i18n/ --template i18n/intl_messages.arb --prefix lang --languages en,fr,es,de,it,ur -f
+i18n flutter --dir i18n/
+```
+
+# 3. Add translated strings back again to code!
+
+`make lang-gen-flu-dart`
+or manually:
+
+```
+flutter pub run intl_translation:generate_from_arb --output-dir=lib/core/i18n/generated/ lib/core/i18n/translations.dart i18n/*.arb
+```
+
+# 4. Start Flutter project and test
+e.g.
+
+flutter pub get
+flutter run -d chrome

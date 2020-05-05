@@ -1,3 +1,7 @@
+#i18n
+lib/core/i18n/generated/
+i18n/
+
 # Miscellaneous
 *.class
 *.log

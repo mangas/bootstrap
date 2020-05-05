@@ -1,5 +1,6 @@
-.PHONY: install
+include ../../../boilerplate/makefiles/tools.mk
 
-install:
-	go build . && go install .
-	@rm -rf ./protoc-gen-configdefault
+override LIB_BIN_NAME=protoc-gen-msgnames
+
+.PHONY: help build
+

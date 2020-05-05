@@ -1,16 +1,17 @@
-# https://github.com/rwtodd/Go.Sed
-
-LIB_NAME=Go.Sed
-LIB=github.com/rwtodd/$(LIB_NAME)
+LIB_NAME=bootstrap
+LIB_ORG=getcouragenow
+LIB=github.com/${LIB_ORG}/$(LIB_NAME)
 LIB_BRANCH=master
-LIB_TAG=v0.39.0
+LIB_TAG=master
 LIB_FSPATH=$(GOPATH)/src/$(LIB)
 
-LIB_BIN_NAME=go-sed
+LIB_BIN_NAME=bs
 LIB_BIN_FSPATH=$(GOPATH)/bin/$(LIB_BIN_NAME)
 
-#help:  ## Display this help
-#	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+GREEN  := $(shell tput -Txterm setaf 2)
+YELLOW := $(shell tput -Txterm setaf 3)
+WHITE  := $(shell tput -Txterm setaf 7)
+RESET  := $(shell tput -Txterm sgr0)
 
 ## Show help
 help:
@@ -19,7 +20,7 @@ help:
 	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
 	@echo ''
 	@echo 'Targets:'
-	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
+	@awk '/^[a-zA-Z\-0-9_]+:/ { \
 		helpMessage = match(lastLine, /^## (.*)/); \
 		if (helpMessage) { \
 			helpCommand = substr($$1, 0, index($$1, ":")-1); \
@@ -29,7 +30,7 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-
+## Print environment
 print: ## print
 	@echo
 	@echo $(OS)
@@ -44,32 +45,14 @@ print: ## print
 	@echo LIB_BIN_FSPATH: $(LIB_BIN_FSPATH)
 	@echo
 
-git-clone:
-	mkdir -p $(LIB_FSPATH)
-	cd $(LIB_FSPATH) && cd .. && rm -rf $(LIB_NAME) && git clone ssh://git@$(LIB).git
-git-clone-master: git-clone ## git-clone-master
-	cd $(LIB_FSPATH) && git checkout $(LIB_BRANCH)
-git-clone-tag: git-clone ## git-clone-tag
-	cd $(LIB_FSPATH) && git checkout tags/$(LIB_TAG)
-	cd $(LIB_FSPATH) && git status
-git-pull:
-	cd $(LIB_FSPATH) && git pull
-git-clean:
-	rm -rf $(LIB_FSPATH)
-
-code:
-	code $(LIB_FSPATH)
 
 
+## Build binary to GOPATH/bin
 build: ## build
 	# builds into GO BIN
-	cd $(LIB_FSPATH)/cmd/sed-go && go build -o $(LIB_BIN_FSPATH) .
+	go build -o $(LIB_BIN_FSPATH) .
 
+## Clean generated binary
 build-clean: ## build-clean
 	rm $(LIB_BIN_FSPATH)
-
-
-
-
-
 

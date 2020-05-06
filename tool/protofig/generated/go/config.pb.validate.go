@@ -189,10 +189,10 @@ func (m *MaintemplateComponent) Validate() error {
 		}
 	}
 
-	if v, ok := interface{}(m.GetMinioendpoint()).(interface{ Validate() error }); ok {
+	if v, ok := interface{}(m.GetMinioEndpoint()).(interface{ Validate() error }); ok {
 		if err := v.Validate(); err != nil {
 			return MaintemplateComponentValidationError{
-				field:  "Minioendpoint",
+				field:  "MinioEndpoint",
 				reason: "embedded message failed validation",
 				cause:  err,
 			}

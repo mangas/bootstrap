@@ -302,7 +302,7 @@ func (c *Component) CreateMaintemplateComponent() (*MaintemplateComponent, error
 	if err != nil {
 		return nil, err
 	}
-	minioendpoint, err := toConfigVal(c.Config["minioendpoint"])
+	minioEndpoint, err := toConfigVal(c.Config["minioEndpoint"])
 	if err != nil {
 		return nil, err
 	}
@@ -314,7 +314,7 @@ func (c *Component) CreateMaintemplateComponent() (*MaintemplateComponent, error
 	    MinioTimeout: minioTimeout,
 	    MinioSsl: minioSsl,
 	    MinioEnckey: minioEnckey,
-	    Minioendpoint: minioendpoint,
+	    MinioEndpoint: minioEndpoint,
 	    
 	}, nil
 }
@@ -521,7 +521,7 @@ func (x *MaintemplateComponent) ToComponent() (*Component, error) {
 	fields["minioEnckey"], err = x.MinioEnckey.FromConfigVal()
 	if err != nil { return nil, err }
 	
-	fields["minioendpoint"], err = x.Minioendpoint.FromConfigVal()
+	fields["minioEndpoint"], err = x.MinioEndpoint.FromConfigVal()
 	if err != nil { return nil, err }
 	
 	return &Component{

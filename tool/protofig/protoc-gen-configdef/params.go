@@ -1,12 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 )
 
 type commandLineParams struct {
-	outfile string // user's name
+	outputFormat string // dart output path
+	suffix       string // user's name
 }
 
 // parseCommandLineParams breaks the comma-separated list of key=value pairs
@@ -34,13 +36,18 @@ func parseCommandLineParams(parameter string) (clp commandLineParams, err error)
 	}
 
 	for k, v := range ps {
-		switch {
-		case k == "outfile":
-			clp.outfile = v
+		switch k {
+		case "output_format":
+			if v == "go" || v == "dart" || v == "json" {
+				clp.outputFormat = v
+			} else {
+				return clp, errors.New("invalid parameter output_format: can only take 'dart' or 'go'")
+			}
+		case "suffix":
+			clp.suffix = v
 		default:
 			err = fmt.Errorf("unknown parameter %q", k)
 		}
 	}
-
-	return
+	return clp, nil
 }

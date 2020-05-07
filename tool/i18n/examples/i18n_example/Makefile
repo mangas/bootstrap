@@ -18,7 +18,6 @@ help: ## Display this help
 # 1. make lang-gen-flu => generate all files
 
 lang-print: ##lang-print
-
 	@echo
 	@echo LANG_CURRENT_DIR: 			$(CURRENT_DIR)
 	@echo I18N_SUPPORTED_LANGUAGES: 	$(I18N_SUPPORTED_LANGUAGES)
@@ -38,10 +37,30 @@ lang-dep: ## lang-dep
 lang-gen-flu: ## lang-gen-flu
 	@mkdir -p $(I18N_GENERATED_DIR)
 	@mkdir -p $(I18N_DIR)
-	@curl "https://raw.githubusercontent.com/getcouragenow/packages/master/mod-main/client/lib/core/i18n/translations.dart" > $(I18N_LOCALIZATION_DIR)/translations.dart
+#	@curl "https://raw.githubusercontent.com/getcouragenow/packages/master/mod-main/client/lib/core/i18n/translations.dart" > $(I18N_LOCALIZATION_DIR)/translations.dart
 	@flutter pub run intl_translation:extract_to_arb --output-dir=$(I18N_DIR) $(I18N_LOCALIZATION_DIR)/translations.dart
 	@i18n flutter --dir $(I18N_DIR) --template $(I18N_TEMPLATE_PATH) --prefix $(I18N_PREFIX_OUT_FILES) --languages $(I18N_SUPPORTED_LANGUAGES) -f
 	@i18n flutter --dir $(I18N_DIR)
 
 lang-gen-flu-dart: ## lang-gen-flu-dart
 	flutter pub run intl_translation:generate_from_arb --output-dir=$(I18N_GENERATED_DIR) $(I18N_LOCALIZATION_DIR)/translations.dart $(I18N_DIR)/*.arb
+
+# git include
+#include ../../../../../packages/boilerplate/help.mk
+#include ../../../../../packages/boilerplate/flu.mk
+
+#override FLU_SAMPLE_NAME =
+#override FLU_LIB_NAME =
+
+# to get the example running follow the steps:
+# 0. make flu-gen-lang
+# 1. make flu-gen-lang-dart
+# 2. make flu-web-run
+
+## Print all settings
+#print: ## print
+#	@echo -- REPO -- 
+#	@echo REPOSITORY: $(REPOSITORY)
+#	@echo
+#	
+#	$(MAKE) flu-print

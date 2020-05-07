@@ -59,16 +59,16 @@ func getTranslatedMaps(sep string, WordsTranslated []Translate, m *linkedhashmap
 	for _, tr := range WordsTranslated {
 		mapLang := linkedhashmap.New()
 		it := m.Iterator()
-		index := 0
 		words := strings.Split(tr.Words, sep)
+		i := 0
 		for it.Next() {
 			if !strings.HasPrefix(it.Key().(string), "@") {
-				mapLang.Put(it.Key(), strings.TrimSpace(words[index]))
-				index++
-			} else {
-				if full {
-					mapLang.Put(it.Key(), it.Value())
+				if len(words) > i {
+					mapLang.Put(it.Key(), strings.TrimSpace(words[i]))
+					i++
 				}
+			} else if full {
+				mapLang.Put(it.Key(), it.Value())
 			}
 		}
 

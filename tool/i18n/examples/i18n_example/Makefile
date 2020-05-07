@@ -1,6 +1,6 @@
 CURRENT_DIR = $(shell pwd)
 
-I18N_SUPPORTED_LANGUAGES = en,fr,es,de,it,ur
+I18N_SUPPORTED_LANGUAGES = 'en,fr,es,de,it,ur'
 
 I18N_DIR = $(CURRENT_DIR)/i18n
 I18N_LOCALIZATION_DIR = $(CURRENT_DIR)/lib/core/i18n

@@ -94,6 +94,7 @@ func New(option string) (*Settings, error) {
 
 	}
 	return &Settings{
-			GoogleSheet: configs},
+			GoogleSheet: configs,
+		},
 		nil
 }

@@ -13,7 +13,7 @@ type CleanTranslation struct {
 }
 
 // CleanData clean data by replacing errors during translation
-func CleanData(data string, tagsFileDir, tagsFileName string) string {
+func CleanData(data, tagsFileDir, tagsFileName string) string {
 	cleanedData := data
 
 	cleanTags, _ := GetCleanTranslationTags(tagsFileDir, tagsFileName)

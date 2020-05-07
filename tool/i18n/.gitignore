@@ -10,3 +10,4 @@ outputs
 .DS_Store
 static/
 .idea/*
+vendor/

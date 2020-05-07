@@ -87,7 +87,7 @@ func tomlFiles(csvFileContent [][]string, config config.Config, cleanTagsDir, cl
 	for index, col := range csvFileContent[0][1:] {
 
 		cache := make(map[string]int)
-		languages := []TomlFormat{}
+		var languages []TomlFormat
 		cleanedData := ""
 		fileName := getOutFileName(config.FileName, col)
 		index++
@@ -155,10 +155,10 @@ func tomlFiles(csvFileContent [][]string, config config.Config, cleanTagsDir, cl
 	return nil
 }
 
-// JSONify allows to convert linkedhashmap.Map with a max deep of two to json
+// JSONify allows to convert linkedhashmap.Map with a max depth of two to json
 // Todo make it recursive
 func jsonify(m *linkedhashmap.Map) ([]byte, error) {
-	var b = []byte{}
+	var b []byte
 	buf := bytes.NewBuffer(b)
 
 	buf.WriteRune('{')

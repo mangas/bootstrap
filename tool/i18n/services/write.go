@@ -148,8 +148,8 @@ func WriteLanguageFiles(csvFilePath string, jsonDirPath string, sheet string) er
 		return errors.Wrap(err, sheet+" : "+"Cannot open file: \""+langAbsPath+"\"")
 	}
 
-	//log.Println("langAbsPath: \"" + langAbsPath + "\"")
-	//os.Exit(1)
+	// log.Println("langAbsPath: \"" + langAbsPath + "\"")
+	// os.Exit(1)
 
 	err = file.Truncate(0)
 	if err != nil {
@@ -275,6 +275,16 @@ func GenerateMultiLanguagesArbFilesFromJSONFiles(dir, prefix, extFile, outExtFil
 	}
 	return nil
 }
+
+// mlOutputConfig is the output configuration for GenerateMultiLanguageFilesFromTemplate
+// type mlOutputConfig struct {
+// 	templatePath string // template arb filepath
+// 	outPath      string // output path
+// 	ext          string // extension name
+// 	separator string // separator for template words
+// 	languages []string // languages to generate
+// 	full bool //
+// }
 
 // GenerateMultiLanguageFilesFromTemplate write multilanguage json files
 func GenerateMultiLanguageFilesFromTemplate(templatePath, outPath, fileName, ext, sep string, languages []string, full bool) error {

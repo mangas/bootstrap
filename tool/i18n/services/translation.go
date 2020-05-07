@@ -32,7 +32,7 @@ type ArbAttr struct {
 func getTemplateWords(m *linkedhashmap.Map, delay time.Duration, tries int, fromLang, sep string, languages []string) ([]Translate, error) {
 
 	words := getTranslateWords(m, sep)
-	wordsTranslated := []Translate{}
+	var wordsTranslated []Translate
 	for _, lang := range languages {
 
 		t := Translate{}
@@ -82,7 +82,7 @@ func getTranslatedMaps(sep string, WordsTranslated []Translate, m *linkedhashmap
 func getTranslateWords(m *linkedhashmap.Map, sep string) string {
 	it := m.Iterator()
 
-	out := []string{}
+	var out []string
 	for it.Next() {
 		if !strings.HasPrefix(it.Key().(string), "@") {
 			v, ok := it.Value().(string)

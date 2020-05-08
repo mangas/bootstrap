@@ -32,6 +32,8 @@ flu-print:
 flu-config:
 	flutter channel beta
 	flutter upgrade --force
+	$(MAKE) flu-gen-lang
+	$(MAKE) flu-gen-lang-dart
 
 ## Run Flutter Tests
 flu-test:

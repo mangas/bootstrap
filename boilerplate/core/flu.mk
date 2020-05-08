@@ -33,6 +33,13 @@ flu-config:
 	flutter channel beta
 	flutter upgrade --force
 
+## Run Flutter Tests
+flu-test:
+	$(MAKE) flu-gen-lang-clean
+	$(MAKE) flu-gen-lang
+	$(MAKE) flu-gen-lang-dart
+	cd $(FLU_SSAMPLE_FSPATH) && flutter test
+
 ## Runs Flutter Web.
 flu-web-run:
 	flutter config --enable-web
@@ -170,6 +177,7 @@ flu-gen-lang-dep:
 
 ## Generates language file for maintemplate and all submodules
 flu-gen-lang-all:
+	$(MAKE) flu-gen-lang-clean
 	$(MAKE) flu-gen-lang
 	$(MAKE) flu-gen-lang-dart
 	$(MAKE) flu-gen-lang-submodules
@@ -180,6 +188,11 @@ flu-gen-lang-submodules:
 	cd ../../mod-account/client && make lang-gen-flu
 	cd ../../mod-chat/client && make lang-gen-flu
 	cd ../../mod-main/client && make lang-gen-flu
+
+## Cleans up all language code
+flu-gen-lang-clean:
+	rm -rf $(FLU_LANG_DIR)
+	rm -rf $(FLU_LANG_GENERATED_DIR)
 
 ## Generates language code
 flu-gen-lang:
@@ -201,7 +214,7 @@ flu-gen-lang:
 
 ## Generates dart code out of arb files
 flu-gen-lang-dart:
-	flutter pub run intl_translation:generate_from_arb --output-dir=$(FLU_LANG_GENERATED_DIR) $(FLU_LANG_LOCALIZATION_DIR)/translations.dart $(FLU_LANG_DIR)/*.arb
+	cd $(FLU_LIB_FSPATH) && flutter pub run intl_translation:generate_from_arb --output-dir=$(FLU_LANG_GENERATED_DIR) $(FLU_LANG_LOCALIZATION_DIR)/translations.dart $(FLU_LANG_DIR)/*.arb
 
 
 

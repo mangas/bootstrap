@@ -10,6 +10,9 @@ include ./boilerplate/core/os.mk
 include ./boilerplate/core/gitr.mk
 include ./boilerplate/core/go.mk
 
+# example of how to override as needed
+override GO_FSPATH = $(PWD)
+override GO_BUILD_OUT_FSPATH = $(GOPATH)/bin/bs
 
 ## Print all settings
 print: ## print
@@ -25,3 +28,7 @@ print: ## print
 ## So high
 high: ## high
 	@echo i wanna get...
+
+
+build:
+	$(MAKE) go-build

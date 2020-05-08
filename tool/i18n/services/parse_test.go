@@ -10,7 +10,7 @@ var (
 	arbData = []byte(`
 {
   "@@last_modified": "2020-05-08T01:32:44.656753",
-  "country": "Country Road Take Me Home To The Place I Belong",
+  "country": "Country Road Take Me Home To The Place I Belong West Virginia Country Mama Take Me Home Country Road",
   "@country": {
     "description": "Country",
     "type": "text",
@@ -233,7 +233,6 @@ func TestTranslate(t *testing.T) {
 	if err := ioutil.WriteFile("/tmp/data.arb", arbData, 0644); err != nil {
 		t.Fatalf("\t%s\tShould be able to write data file to /tmp: %v", failed, err)
 	}
-	// fmt.Println(GenerateMultiLanguageFilesFromTemplate("../examples/intl.arb", "", "out", ".json", "==", []string{"fr", "es"}, false))
 	t.Run("Test Multi Languages Files From Template", testGenerateMultiLanguageFilesFromTemplate)
 }
 

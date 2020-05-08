@@ -2,7 +2,6 @@ package services
 
 import (
 	"github.com/emirpasic/gods/maps/linkedhashmap"
-	"strings"
 	"testing"
 	"time"
 )
@@ -11,7 +10,7 @@ var (
 	arbData = []byte(`
 {
   "@@last_modified": "2020-05-08T01:32:44.656753",
-  "country": "Country Road Take Me Home To The Place I Belong",
+  "country": "Country Road Take Me Home To The Place I Belong West Virginia Country Mama Take me home country road",
   "@country": {
     "description": "Country",
     "type": "text",
@@ -226,8 +225,8 @@ var (
 )
 
 const (
-	success = "\u2713"
-	failed  = "\u274c"
+	success   = "\u2713"
+	failed    = "\u274c"
 	separator = "=="
 )
 
@@ -264,13 +263,13 @@ func testGetTemplateWords(t *testing.T) {
 			t.Fatalf("\t%s\tMap size should've been the same as the number of arb keys: %v",
 				failed, m.Size())
 		}
+		
 
 		for _, w := range translated {
 			t.Logf("Per lang: %v", w.Words)
-			splittedWords := strings.Split(w.Words, separator)
-			if len(splittedWords) != 35 {
+			if len(w.Words) != 35 {
 				t.Fatalf("\t%s\tShould return the same amount of word as translated => expected: %d, got: %d",
-				failed, 35, len(splittedWords))
+					failed, 35, len(w.Words))
 			}
 		}
 	}
@@ -279,12 +278,12 @@ func testGetTemplateWords(t *testing.T) {
 func testGetTranslatedMaps(t *testing.T) {
 	t.Log("Tests mapping translated words back to map")
 	{
-		transMap, err := getTranslatedMaps(separator, translated, m, true)
+		_, err := getTranslatedMaps(separator, translated, m, true)
 		if err != nil {
 			t.Fatalf("\t%s\tShould be able to map translated words back to the linkedhashmap: %v",
 				failed, err)
 		}
-		t.Logf("\t%s\tShould be able to map translated words back to the linkedhashmap: %v",
-			success, transMap)
+		t.Logf("\t%s\tShould be able to map translated words back to the linkedhashmap",
+			success)
 	}
 }

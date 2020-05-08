@@ -1,4 +1,4 @@
-
+# flu utils
 
 
 current_dir = $(shell pwd)
@@ -80,7 +80,7 @@ flu-mob-build: ## flu-mob-build
 	cd $(FLU_SSAMPLE_FSPATH)/ios && pod install
 	#cd $(FLU_SSAMPLE_FSPATH) && flutter build ios
 
-	cd $(FLU_SSAMPLE_FSPATH) && 	flutter build ios --release --no-codesign
+	cd $(FLU_SSAMPLE_FSPATH) && flutter build ios --release --no-codesign
 
 ## Inits Flutter Desktop
 flu-desk-init: ## flu-desk-init

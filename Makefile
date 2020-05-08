@@ -8,12 +8,7 @@
 include ./boilerplate/core/help.mk
 include ./boilerplate/core/os.mk
 include ./boilerplate/core/gitr.mk
-
-
-#export REPOSITORY=$(MAKE) git-
-
-# remove the "v" prefix
-VERSION ?= $(shell echo $(TAGGED_VERSION) | cut -c 2-)
+include ./boilerplate/core/go.mk
 
 
 ## Print all settings
@@ -23,6 +18,8 @@ print: ## print
 	$(MAKE) os-print
 	
 	$(MAKE) gitr-print
+
+	$(MAKE) go-print
 	
 
 ## So high

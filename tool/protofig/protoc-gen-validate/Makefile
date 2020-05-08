@@ -1,6 +1,4 @@
-# https://github.com/rwtodd/protoc-gen-validate
-
-include ../../../boilerplate/makefiles/tools.mk
+include ../../../boilerplate/tool/tools.mk
 
 override LIB_NAME=protoc-gen-validate
 override LIB_BIN_NAME=protoc-gen-validate

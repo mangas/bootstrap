@@ -4,19 +4,17 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
+	"github.com/emirpasic/gods/maps/linkedhashmap"
+	"github.com/getcouragenow/bootstrap/tool/i18n/services/config"
+	"github.com/getcouragenow/bootstrap/tool/i18n/utils"
+	"github.com/pkg/errors"
+	"github.com/tidwall/pretty"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
-	"time"
-
-	"github.com/emirpasic/gods/maps/linkedhashmap"
-	"github.com/getcouragenow/bootstrap/tool/i18n/services/config"
-	"github.com/getcouragenow/bootstrap/tool/i18n/utils"
-	"github.com/pkg/errors"
-	"github.com/tidwall/pretty"
 )
 
 // WriteDataDumpFiles exported
@@ -300,7 +298,7 @@ func GenerateMultiLanguageFilesFromTemplate(templatePath, outPath, fileName, ext
 		return err
 	}
 
-	wordsTranslated, err := getTemplateWords(m, time.Second*3, 3, "en", sep, languages)
+	wordsTranslated, err := getTemplateWords(m, config.TranslateTimeout, 3, "en", sep, languages)
 	if err != nil {
 		return err
 	}

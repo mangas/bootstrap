@@ -1,9 +1,10 @@
-package services_test
+package services
 
 import (
-	"github.com/getcouragenow/bootstrap/tool/i18n/services"
-	"io/ioutil"
+	"github.com/emirpasic/gods/maps/linkedhashmap"
+	"strings"
 	"testing"
+	"time"
 )
 
 var (
@@ -227,37 +228,63 @@ var (
 const (
 	success = "\u2713"
 	failed  = "\u274c"
+	separator = "=="
 )
 
-func TestTranslate(t *testing.T) {
-	if err := ioutil.WriteFile("/tmp/data.arb", arbData, 0644); err != nil {
-		t.Fatalf("\t%s\tShould be able to write data file to /tmp: %v", failed, err)
-	}
-	// fmt.Println(GenerateMultiLanguageFilesFromTemplate("../examples/intl.arb", "", "out", ".json", "==", []string{"fr", "es"}, false))
-	t.Run("Test Multi Languages Files From Template", testGenerateMultiLanguageFilesFromTemplate)
+var translated []Translate
+var m = linkedhashmap.New()
+
+func TestTemplate(t *testing.T) {
+	t.Run("Test getTemplateWords", testGetTemplateWords)
+	t.Run("Test getTranslatedMaps", testGetTranslatedMaps)
 }
 
-func testGenerateMultiLanguageFilesFromTemplate(t *testing.T) {
-	t.Log("Test multi language files from template")
+func testGetTemplateWords(t *testing.T) {
+	t.Log("Test getting translations from template")
 	{
-		err := services.GenerateMultiLanguageFilesFromTemplate(
-			"/tmp/data.arb",
-			"/tmp",
-			"out",
-			".json",
-			"==",
-			[]string{"fr", "es", "de", "it", "ur"},
-			false,
+		err := m.FromJSON(arbData)
+		if err != nil {
+			t.Fatalf("\t%s\tShould be able to get linkedhashmap from json data: %v",
+				failed, err)
+		}
+
+		translated, err = getTemplateWords(
+			m, 3*time.Second, 3, "en", separator, []string{"en", "fr", "de", "it", "ur"},
 		)
 		if err != nil {
 			t.Fatalf(
-				"\t%s\tShould be able to write translated output files to /tmp, got: %v",
-				failed,
-				err,
+				"\t%s\tShould be able to get translated words from google, got: %v",
+				failed, err,
 			)
 		}
-		t.Logf("\t%s\tShould be able to write translated output files to /tmp",
-			success)
+		t.Logf("\t%s\tShould be able to get translated words from google: %v",
+			success, translated)
+
+		if m.Size() != 71 {
+			t.Fatalf("\t%s\tMap size should've been the same as the number of arb keys: %v",
+				failed, m.Size())
+		}
+
+		for _, w := range translated {
+			t.Logf("Per lang: %v", w.Words)
+			splittedWords := strings.Split(w.Words, separator)
+			if len(splittedWords) != 35 {
+				t.Fatalf("\t%s\tShould return the same amount of word as translated => expected: %d, got: %d",
+				failed, 35, len(splittedWords))
+			}
+		}
 	}
 }
 
+func testGetTranslatedMaps(t *testing.T) {
+	t.Log("Tests mapping translated words back to map")
+	{
+		transMap, err := getTranslatedMaps(separator, translated, m, true)
+		if err != nil {
+			t.Fatalf("\t%s\tShould be able to map translated words back to the linkedhashmap: %v",
+				failed, err)
+		}
+		t.Logf("\t%s\tShould be able to map translated words back to the linkedhashmap: %v",
+			success, transMap)
+	}
+}

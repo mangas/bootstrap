@@ -48,6 +48,9 @@ var (
 
 	// RouteCalcDelayStdDev is standard deviation
 	RouteCalcDelayStdDev = RouteCalcDelay / 4
+
+	// for gtranslate Timeout
+	TranslateTimeout = 5 * time.Second
 )
 
 // Settings consists of all the application configuration

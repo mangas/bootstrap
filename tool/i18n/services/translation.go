@@ -18,7 +18,8 @@ type TranslatedMaps struct {
 // Translate struct
 type Translate struct {
 	Lang  string
-	Words string
+	// Words string
+	Words []string
 }
 
 // ArbAttr struct
@@ -30,24 +31,24 @@ type ArbAttr struct {
 
 // translate a string from languages to language
 func getTemplateWords(m *linkedhashmap.Map, delay time.Duration, tries int, fromLang, sep string, languages []string) ([]Translate, error) {
-
 	words := getTranslateWords(m, sep)
 	var wordsTranslated []Translate
 	for _, lang := range languages {
-
 		t := Translate{}
-		out, err := gtranslate.TranslateWithParams(words,
-			gtranslate.TranslationParams{
-				From:  fromLang,
-				To:    lang,
-				Tries: tries,
-				Delay: delay,
-			})
-		if err != nil {
-			log.Printf("Error to translate from %s to %s\n", fromLang, lang)
+		for _, w := range words {
+			out, err := gtranslate.TranslateWithParams(w,
+				gtranslate.TranslationParams{
+					From:  fromLang,
+					To:    lang,
+					Tries: tries,
+					Delay: delay,
+				})
+			if err != nil {
+				log.Printf("Error to translate from %s to %s\n", fromLang, lang)
+			}
+			t.Words = append(t.Words, out)
 		}
 		t.Lang = lang
-		t.Words = out
 		wordsTranslated = append(wordsTranslated, t)
 	}
 	return wordsTranslated, nil
@@ -59,14 +60,18 @@ func getTranslatedMaps(sep string, WordsTranslated []Translate, m *linkedhashmap
 	for _, tr := range WordsTranslated {
 		mapLang := linkedhashmap.New()
 		it := m.Iterator()
-		words := strings.Split(tr.Words, sep)
+		// words := strings.Split(tr.Words, sep)
 		i := 0
 		for it.Next() {
 			if !strings.HasPrefix(it.Key().(string), "@") {
-				if len(words) > i {
-					mapLang.Put(it.Key(), strings.TrimSpace(words[i]))
+				if len(tr.Words) > i {
+					mapLang.Put(it.Key(), strings.TrimSpace(tr.Words[i]))
 					i++
 				}
+				// if len(tr.Words) > i {
+				// 	mapLang.Put(it.Key(), strings.TrimSpace(words[i]))
+				// 	i++
+				// }
 			} else if full {
 				mapLang.Put(it.Key(), it.Value())
 			}
@@ -79,9 +84,8 @@ func getTranslatedMaps(sep string, WordsTranslated []Translate, m *linkedhashmap
 	return translatedMaps, nil
 }
 
-func getTranslateWords(m *linkedhashmap.Map, sep string) string {
+func getTranslateWords(m *linkedhashmap.Map, sep string) []string {
 	it := m.Iterator()
-
 	var out []string
 	for it.Next() {
 		if !strings.HasPrefix(it.Key().(string), "@") {
@@ -91,5 +95,6 @@ func getTranslateWords(m *linkedhashmap.Map, sep string) string {
 			}
 		}
 	}
-	return strings.Join(out, sep)
+	return out
+	// return strings.Join(out, sep)
 }

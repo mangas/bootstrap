@@ -1,5 +1,7 @@
 # langugae tools for i18n
 
+# NOTE: This is redundant as we put it into flu-mk 
+
 
 LANG_CURRENT_DIR = $(shell pwd)
 
@@ -12,6 +14,7 @@ I18N_TEMPLATE_NAME = intl_messages.arb
 I18N_TEMPLATE_PATH = $(I18N_DIR)/$(I18N_TEMPLATE_NAME)
 I18N_PREFIX_OUT_FILES = lang
 
+# Prints the 
 lang-print: ##lang-print
 
 	@echo

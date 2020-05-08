@@ -7,7 +7,8 @@ HELP_YELLOW := $(shell tput -Txterm setaf 3)
 HELP_WHITE  := $(shell tput -Txterm setaf 7)
 HELP_RESET  := $(shell tput -Txterm sgr0)
 
-help:  ## Display this help
+# Print help
+help:
 
 	@echo ''
 	@echo 'Usage:'

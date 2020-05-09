@@ -30,7 +30,7 @@ var (
 		{{ end }}
 	}
 	toolPathMap = map[string]string{
-		{{ range $k, $v := .Statiks }}"{{ $k }}": "{{ $v }}",
+		{{ range $k, $v := .Tools }}"{{ $k }}": "{{ $v }}",
 		{{ end }}
 	}
 )	

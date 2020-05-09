@@ -1,6 +1,7 @@
 package osutil
 
 import (
+	"bytes"
 	"github.com/karrick/godirwalk"
 	log "github.com/sirupsen/logrus"
 	"os/exec"
@@ -8,17 +9,40 @@ import (
 	"strings"
 )
 
+const (
+	CheckMark = "\u2713"
+	CrossMark = "\u274c"
+)
+
 // BinExists checks binary name in the user's PATH
 func BinExists(binname string) bool {
-	if _, err := PrintBinaryPath(binname); err != nil {
+	p, err := PrintBinaryPath(binname)
+	if err != nil {
 		return false
 	}
+	log.Println(p)
 	return true
 }
 
 // PrintBinaryPath prints binary location in the user's PATH
 func PrintBinaryPath(binname string) (string, error) {
 	return exec.LookPath(binname)
+}
+
+// blanket implementation for Unices / *nix-like OSes
+func RunUnixCmd(cmdName string, flags ...string) (*string, error) {
+	cmd := exec.Command(cmdName, flags...)
+	cmd.Stdin = strings.NewReader(" ")
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+	if err != nil {
+		return nil, err
+	}
+	output := strings.TrimSpace(out.String())
+	return &output, nil
 }
 
 // WalkPath gets all the directory names in the specified directory

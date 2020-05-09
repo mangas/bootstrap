@@ -41,6 +41,7 @@ statiks:
 	@statik -src=$(PWD)/boilerplate/core -ns bpcore -p bpcore -dest=$(STATIK_DEST) -f
 	@statik -src=$(PWD)/boilerplate/lyft -ns bplyft -p bplyft -dest=$(STATIK_DEST) -f
 	@statik -src=$(PWD)/boilerplate/tool -ns bptool -p bptool -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate/os -ns bpos -p bpos -dest=$(STATIK_DEST) -f
 	@statik -src=$(PWD)/boilerplate -ns bproot -p bproot -dest=$(STATIK_DEST) -f
 
 scan-statiks-tools:

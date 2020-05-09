@@ -12,10 +12,10 @@ import (
 	"github.com/getcouragenow/bootstrap/sdk/pkg/common/embed"
 	_ "github.com/getcouragenow/bootstrap/statiks/bpcore"
 	_ "github.com/getcouragenow/bootstrap/statiks/bplyft"
+	_ "github.com/getcouragenow/bootstrap/statiks/bpos"
 	_ "github.com/getcouragenow/bootstrap/statiks/bproot"
 	_ "github.com/getcouragenow/bootstrap/statiks/bptool"
 	"github.com/rakyll/statik/fs"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -24,8 +24,6 @@ type BPAsset struct {
 }
 
 func filterNS(namespaces []string, arg string) bool {
-	log.Println(namespaces)
-	log.Println(len(namespaces))
 	for _, ns := range namespaces {
 		if ns == arg {
 			return true

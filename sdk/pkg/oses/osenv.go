@@ -58,12 +58,7 @@ func (o *osProperties) GetOsInfo() OSInfoGetter { return o.osInfo }
 func (o *osProperties) ToContent() termutil.Contents {
 	ms := termutil.Contents{}
 	var groups []string
-	//var s strings.Builder
 	for i := 0; i < len(o.GetGroups()); i++ {
-		//s.WriteString(o.GetGroups()[i].Name)
-		//if i < (len(o.GetGroups()) - 1) {
-		//	s.WriteRune('\n')
-		//}
 		groups = append(groups, o.GetGroups()[i].Name)
 	}
 	ms["User"] = []string{o.GetName()}

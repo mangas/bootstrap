@@ -16,7 +16,7 @@ override GO_BUILD_OUT_FSPATH = $(GOPATH)/bin/bs
 
 STATIK_DEST = $(PWD)/statiks
 
-.PHONY: help statiks build
+.PHONY: help statiks scan-statiks-tools build
 
 ## Print all settings
 print: ## print
@@ -34,12 +34,15 @@ high: ## high
 	@echo i wanna get...
 
 
-build: 
+build: statiks scan-statiks-tools
 	$(MAKE) go-build
 
 statiks:
-	@statik -src=boilerplate -ns bproot -p bproot -dest=$(STATIK_DEST) -f
-	@statik -src=boilerplate/core -ns bpcore -p bpcore -dest=$(STATIK_DEST) -f
-	@statik -src=boilerplate/lyft -ns bplyft -p bplyft -dest=$(STATIK_DEST) -f
-	@statik -src=boilerplate/tool -ns bptool -p bptool -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate/core -ns bpcore -p bpcore -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate/lyft -ns bplyft -p bplyft -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate/tool -ns bptool -p bptool -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate -ns bproot -p bproot -dest=$(STATIK_DEST) -f
+
+scan-statiks-tools:
+	@go run $(PWD)/sdk/cmd/scantool -t $(PWD)/tool -s $(STATIK_DEST) -o $(PWD)/sdk/cmd/path.go
 

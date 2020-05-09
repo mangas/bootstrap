@@ -8,6 +8,7 @@ require (
 	github.com/go-flutter-desktop/hover v0.39.0
 	github.com/golang/protobuf v1.4.0 // indirect
 	github.com/gookit/color v1.2.5
+	github.com/karrick/godirwalk v1.15.6
 	github.com/kataras/sheets v0.0.0-20200317152234-45c7a6f312b1
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381 // indirect

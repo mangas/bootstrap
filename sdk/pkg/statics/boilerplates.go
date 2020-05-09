@@ -15,18 +15,17 @@ import (
 	_ "github.com/getcouragenow/bootstrap/statiks/bproot"
 	_ "github.com/getcouragenow/bootstrap/statiks/bptool"
 	"github.com/rakyll/statik/fs"
+	log "github.com/sirupsen/logrus"
 	"net/http"
-)
-
-var (
-	namespaces = []string{"core", "lyft", "tool", "root"}
 )
 
 type BPAsset struct {
 	fsys http.FileSystem // the rakyll fs
 }
 
-func filterNS(arg string) bool {
+func filterNS(namespaces []string, arg string) bool {
+	log.Println(namespaces)
+	log.Println(len(namespaces))
 	for _, ns := range namespaces {
 		if ns == arg {
 			return true
@@ -38,15 +37,14 @@ func filterNS(arg string) bool {
 // NewBPAsset function to filter valid namespace
 // for now this will be hardcoded, later down the line,
 // it will be generated.
-func NewBPAsset(namespaceArg string) (embed.AssetEmbedder, error) {
-	found := filterNS(namespaceArg)
+func NewBPAsset(namespaces []string, namespaceArg string) (embed.AssetEmbedder, error) {
+	found := filterNS(namespaces, namespaceArg)
 	if !found {
 		return nil, errors.New(
 			fmt.Sprintf("namespace not found: %s", namespaceArg),
 		)
 	}
-	namespace := fmt.Sprintf("bp%s", namespaceArg)
-	return newBPAsset(namespace)
+	return newBPAsset(namespaceArg)
 }
 
 // NewBPAsset will return BPAsset

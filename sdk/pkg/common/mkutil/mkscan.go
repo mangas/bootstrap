@@ -2,6 +2,8 @@ package mkutil
 
 import (
 	"bufio"
+	"errors"
+	"fmt"
 	"golang.org/x/xerrors"
 	"os"
 	"regexp"
@@ -44,7 +46,7 @@ type MakeRules map[string][]string
 func ScanMakefiles(filepath string) (MakeRules, error) {
 	f, err := os.Open(filepath)
 	if err != nil {
-		return nil, xerrors.Errorf("failed to open file: %w", err)
+		return nil, errors.New(fmt.Sprintf("failed to open file: %w", err))
 	}
 	m := MakeRules{}
 	var buf []string
@@ -73,7 +75,6 @@ func ScanMakefiles(filepath string) (MakeRules, error) {
 	}
 	return m, nil
 }
-
 
 func (m MakeRules) mergeRules(rules MakeRules) MakeRules {
 	for k, v := range rules {

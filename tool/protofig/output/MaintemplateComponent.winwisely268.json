@@ -1,0 +1,23 @@
+{
+  "minioAccesskey":  {
+    "stringVal":  "REPLACE_THIS"
+  },
+  "minioSecretkey":  {
+    "stringVal":  "REPLACE_THIS"
+  },
+  "minioLocation":  {
+    "stringVal":  "REPLACE_THIS"
+  },
+  "minioTimeout":  {
+    "doubleVal":  0
+  },
+  "minioSsl":  {
+    "boolVal":  false
+  },
+  "minioEnckey":  {
+    "stringVal":  "this is of type bytes"
+  },
+  "minioEndpoint":  {
+    "cidrVal":  "aHR0cDovLzEyNy4wLjAuMQ=="
+  }
+}

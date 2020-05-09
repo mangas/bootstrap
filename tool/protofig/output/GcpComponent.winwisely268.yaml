@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gcpComponent-secret
+type: Opaque
+data:
+  gcpProject: UkVQTEFDRV9USElT
+  gcpUser: UkVQTEFDRV9USElT
+  gkeCluster: UkVQTEFDRV9USElT
+  gkeEmail: dGVzdEBleGFtcGxlLmNvbQ==
+  gkeZone: UkVQTEFDRV9USElT
+  

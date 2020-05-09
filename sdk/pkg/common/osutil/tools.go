@@ -42,6 +42,7 @@ func RunUnixCmd(cmdName string, flags ...string) (*string, error) {
 		return nil, err
 	}
 	output := strings.TrimSpace(out.String())
+	log.Println(output)
 	return &output, nil
 }
 

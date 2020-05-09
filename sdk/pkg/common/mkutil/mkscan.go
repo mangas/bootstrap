@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"golang.org/x/xerrors"
 	"os"
 	"regexp"
 	"sort"
@@ -71,7 +70,7 @@ func ScanMakefiles(filepath string) (MakeRules, error) {
 		}
 	}
 	if err = sc.Err(); err != nil {
-		return nil, xerrors.Errorf("scan failed: %w", err)
+		return nil, errors.New(fmt.Sprintf("scan failed: %w", err))
 	}
 	return m, nil
 }

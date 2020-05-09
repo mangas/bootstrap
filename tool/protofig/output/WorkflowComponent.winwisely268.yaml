@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: workflowComponent-secret
+type: Opaque
+data:
+  flutterChannel: UkVQTEFDRV9USElT
+  githubRef: UkVQTEFDRV9USElT
+  githubSha: UkVQTEFDRV9USElT
+  locales: W1JFUExBQ0VfVEhJUywgUkVQTEFDRV9USElTXQ==
+  project: UkVQTEFDRV9USElT
+  
+  releaseChannel: UkVQTEFDRV9USElT
+  url: UkVQTEFDRV9USElT
+  

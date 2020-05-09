@@ -1,0 +1,26 @@
+{
+  "githubSha":  {
+    "stringVal":  "REPLACE_THIS"
+  },
+  "githubRef":  {
+    "stringVal":  "REPLACE_THIS"
+  },
+  "project":  {
+    "stringVal":  "REPLACE_THIS"
+  },
+  "registryHostname":  {
+    "cidrVal":  "aHR0cDovLzEyNy4wLjAuMQ=="
+  },
+  "url":  {
+    "stringVal":  "REPLACE_THIS"
+  },
+  "locales":  {
+    "stringVal":  "[REPLACE_THIS, REPLACE_THIS]"
+  },
+  "flutterChannel":  {
+    "stringVal":  "REPLACE_THIS"
+  },
+  "releaseChannel":  {
+    "stringVal":  "REPLACE_THIS"
+  }
+}

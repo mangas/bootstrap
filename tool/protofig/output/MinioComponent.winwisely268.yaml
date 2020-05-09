@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minioComponent-secret
+type: Opaque
+data:
+  minioAccesskey: UkVQTEFDRV9USElT
+  minioSecretkey: UkVQTEFDRV9USElT
+  

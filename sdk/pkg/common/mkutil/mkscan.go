@@ -74,7 +74,6 @@ func ScanMakefiles(filepath string) (MakeRules, error) {
 	return m, nil
 }
 
-func scanIncludes(filepath string)
 
 func (m MakeRules) mergeRules(rules MakeRules) MakeRules {
 	for k, v := range rules {

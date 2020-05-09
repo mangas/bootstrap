@@ -14,8 +14,7 @@ func NewOsInfoCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			newUserInfo.PrintUserOsEnv()
-			return nil
+			return newUserInfo.PrintUserOsEnv()
 		},
 	}
 	return cmd

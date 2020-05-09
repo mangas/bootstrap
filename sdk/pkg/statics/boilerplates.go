@@ -1,85 +1,69 @@
 package statics
 
 /*
-RootBoilerplate satisfies AssetEmbedder interface
+BPAsset satisfies AssetEmbedder interface
 This one is namespaced for root of the boilerplate directory
 see boilerplate directory in bootstrap to see the content.
- */
+*/
 
 import (
+	"errors"
 	"fmt"
-	_ "github.com/getcouragenow/bootstrap/statik"
+	"github.com/getcouragenow/bootstrap/sdk/pkg/common/embed"
+	_ "github.com/getcouragenow/bootstrap/statiks/bpcore"
+	_ "github.com/getcouragenow/bootstrap/statiks/bplyft"
+	_ "github.com/getcouragenow/bootstrap/statiks/bproot"
+	_ "github.com/getcouragenow/bootstrap/statiks/bptool"
 	"github.com/rakyll/statik/fs"
-	"io/ioutil"
-	"log"
 	"net/http"
-	"os"
-	"path"
-	"path/filepath"
 )
 
-const boilerplateNS = "rootBoilerplate"
+var (
+	namespaces = []string{"core", "lyft", "tool", "root"}
+)
 
-type RootBoilerplate struct {
+type BPAsset struct {
 	fsys http.FileSystem // the rakyll fs
 }
 
-// NewRootBoilerplate will return RootBoilerplate
-func NewRootBoilerplate() (*RootBoilerplate, error){
-	bfs, err := fs.NewWithNamespace(boilerplateNS)
+func filterNS(arg string) bool {
+	for _, ns := range namespaces {
+		if ns == arg {
+			return true
+		}
+	}
+	return false
+}
+
+// NewBPAsset function to filter valid namespace
+// for now this will be hardcoded, later down the line,
+// it will be generated.
+func NewBPAsset(namespaceArg string) (embed.AssetEmbedder, error) {
+	found := filterNS(namespaceArg)
+	if !found {
+		return nil, errors.New(
+			fmt.Sprintf("namespace not found: %s", namespaceArg),
+		)
+	}
+	namespace := fmt.Sprintf("bp%s", namespaceArg)
+	return newBPAsset(namespace)
+}
+
+// NewBPAsset will return BPAsset
+func newBPAsset(namespace string) (embed.AssetEmbedder, error) {
+	bfs, err := fs.NewWithNamespace(namespace)
 	if err != nil {
 		return nil, err
 	}
-	return &RootBoilerplate{
-		fsys:    bfs,
+	return &BPAsset{
+		fsys: bfs,
 	}, nil
 }
 
-func (r *RootBoilerplate) GetFs() http.FileSystem { return r.fsys }
-func (r *RootBoilerplate) WriteAllFiles(outputPath string) error {
-	if err := checkAndMakeDir(outputPath); err != nil {
-		return err
-	}
-	if err := fs.Walk(r.fsys, "/boilerplates", func(filePath string, fileInfo os.FileInfo, err error) error {
-		newPath := path.Join("/boilerplate", filePath)
-		if fileInfo.IsDir() {
-			if err := checkAndMakeDir(newPath); err != nil {
-				return fmt.Errorf("creating directory %q: %w", newPath, err)
-			}
-		} else {
-			file, err := r.fsys.Open(filePath)
-			if err != nil {
-				return fmt.Errorf("opening %q in embedded filesystem: %w", filePath, err)
-			}
-
-			buf, err := ioutil.ReadAll(file)
-			if err != nil {
-				return fmt.Errorf("reading %q in embedded filesystem: %w", filePath, err)
-			}
-
-			if err := ioutil.WriteFile(newPath, buf, 0664); err != nil {
-				return fmt.Errorf("writing %q to %q: %w", filePath, newPath, err)
-			}
-		}
-		return nil
-	}); err != nil {
-		return err
-	}
-
-	s, err := filepath.Abs(outputPath)
-	if err != nil {
-		return err
-	}
-
-	log.Printf("Successfully exported boilerplates to %s", s)
-	return nil
+func (r *BPAsset) GetFS() http.FileSystem { return r.fsys }
+func (r *BPAsset) WriteAllFiles(outputPath string) error {
+	return writeAllFiles(r.fsys, outputPath)
 }
-
-func (r *RootBoilerplate) ReadSingleFile(name string) ([]byte, error) {
-	f, err := r.fsys.Open(fmt.Sprintf("/%s", name))
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-	return ioutil.ReadAll(f)
+func (r *BPAsset) ReadSingleFile(name string) ([]byte, error) {
+	return readSingleFile(r.fsys, name)
 }

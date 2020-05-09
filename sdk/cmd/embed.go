@@ -7,15 +7,15 @@ import (
 
 func NewInitBoilerplateCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "init",
-		Args: cobra.ExactArgs(1),
+		Use:   "init [core|lyft|tool|all] <output_dir>",
+		Args: cobra.ExactArgs(2),
 		Short: "Write boilerplates to your current directory",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			bp, err := statics.NewRootBoilerplate()
+			bp, err := statics.NewBPAsset(args[0])
 			if err != nil {
 				return err
 			}
-			if err = bp.WriteAllFiles(args[0]); err != nil {
+			if err = bp.WriteAllFiles(args[1]); err != nil {
 				return err
 			}
 			return nil

@@ -10,7 +10,6 @@ import (
 	"os"
 	"os/user"
 	"runtime"
-	"strings"
 )
 
 // osProperties is the current environment for user's OS
@@ -56,19 +55,20 @@ func (o *osProperties) GetGroups() []*user.Group {
 	return o.groups
 }
 func (o *osProperties) GetOsInfo() OSInfoGetter { return o.osInfo }
-func (o *osProperties) ToMapString() map[string]string {
-	ms := map[string]string{}
-	var s strings.Builder
+func (o *osProperties) ToContent() termutil.Contents {
+	ms := termutil.Contents{}
+	var groups []string
+	//var s strings.Builder
 	for i := 0; i < len(o.GetGroups()); i++ {
-		s.WriteString(o.GetGroups()[i].Name)
-		if i < (len(o.GetGroups()) - 1) {
-			s.WriteRune(',')
-			s.WriteRune(' ')
-		}
+		//s.WriteString(o.GetGroups()[i].Name)
+		//if i < (len(o.GetGroups()) - 1) {
+		//	s.WriteRune('\n')
+		//}
+		groups = append(groups, o.GetGroups()[i].Name)
 	}
-	ms["Username"] = o.GetName()
-	ms["User Homedir"] = o.GetRoot()
-	ms["User Groups"] = s.String()
+	ms["User"] = []string{o.GetName()}
+	ms["User Homedir"] = []string{o.GetRoot()}
+	ms["User Groups"] = groups
 	return ms
 }
 
@@ -102,11 +102,11 @@ func initGitConfig() (*gitConfig, error) {
 func (g *gitConfig) GetName() string    { return g.name }
 func (g *gitConfig) GetRoot() string    { return g.root }
 func (g *gitConfig) GetAccount() string { return g.account }
-func (g *gitConfig) ToMapString() map[string]string {
-	ms := map[string]string{}
-	ms["Git Username"] = g.GetName()
-	ms["Git Email"] = g.GetAccount()
-	ms["Git URL"] = g.GetRoot()
+func (g *gitConfig) ToContent() termutil.Contents {
+	ms := termutil.Contents{}
+	ms["Git Username"] = []string{g.GetName()}
+	ms["Git Email"] = []string{g.GetAccount()}
+	ms["Git URL"] = []string{g.GetRoot()}
 	return ms
 }
 
@@ -123,10 +123,10 @@ func initGoConfig() *goConfig {
 }
 func (g *goConfig) GoRoot() string { return g.goRoot }
 func (g *goConfig) GoPath() string { return g.goPath }
-func (g *goConfig) ToMapString() map[string]string {
-	ms := map[string]string{}
-	ms["GOROOT"] = g.GoRoot()
-	ms["GOPATH"] = g.GoPath()
+func (g *goConfig) ToContent() termutil.Contents {
+	ms := termutil.Contents{}
+	ms["GOROOT"] = []string{g.GoRoot()}
+	ms["GOPATH"] = []string{g.GoPath()}
 	return ms
 }
 
@@ -159,9 +159,10 @@ func (u *UserOsEnv) GetGoRoot() string              { return u.goEnv.GoRoot() }
 func (u *UserOsEnv) GetGoEnv() *goConfig            { return u.goEnv }
 func (u *UserOsEnv) GetOsProperties() *osProperties { return u.osProperties }
 
-func (u *UserOsEnv) PrintUserOsEnv() {
-	termutil.CreateTable(u.GetOsProperties().GetOsInfo().ToMapString(), "OS Env")
-	termutil.CreateTable(u.GetOsProperties().ToMapString(), "User Env")
-	termutil.CreateTable(u.GetGitUser().ToMapString(), "Git Env")
-	termutil.CreateTable(u.GetGoEnv().ToMapString(), "Go Env")
+func (u *UserOsEnv) PrintUserOsEnv() error {
+	if _, err := fmt.Println(u.GetOsProperties().GetOsInfo().ToContent().String("Os and User info")); err != nil {return err}
+	if _, err := fmt.Println(u.GetOsProperties().ToContent().String("")); err != nil { return err}
+	if _, err := fmt.Println(u.GetGitUser().ToContent().String("")); err != nil { return err}
+	if _, err := fmt.Println(u.GetGoEnv().ToContent().String("")); err != nil { return err}
+	return nil
 }

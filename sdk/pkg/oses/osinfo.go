@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/getcouragenow/bootstrap/sdk/pkg/common/termutil"
 	"os"
 	"os/exec"
 	"runtime"
@@ -20,7 +21,7 @@ type OSInfoGetter interface {
 	GetMemory() float64
 	GetCores() int
 	String() string
-	ToMapString() map[string]string
+	ToContent() termutil.Contents
 }
 
 func getOsInfoGetter() (OSInfoGetter, error) {
@@ -89,7 +90,7 @@ func (d *DarwinOSInfo) String() string {
 	return fmt.Sprintf("OS: %s, Kernel: %s, Platform: %s, Hostname: %s, Cores: %d, Memory: %d",
 		d.osName, d.kernel, d.platform, d.hostName, d.cores, d.memory)
 }
-func (d *DarwinOSInfo) ToMapString() map[string]string { return toMapString(d) }
+func (d *DarwinOSInfo) ToContent() termutil.Contents { return toContent(d) }
 
 // Linux
 type LinuxOSInfo struct {
@@ -143,7 +144,7 @@ func (l *LinuxOSInfo) String() string {
 	return fmt.Sprintf("OS: %s, Kernel: %s, Platform: %s, Hostname: %s, Cores: %d, Memory: %d",
 		l.osName, l.kernel, l.platform, l.hostName, l.cores, l.memory)
 }
-func (l *LinuxOSInfo) ToMapString() map[string]string { return toMapString(l) }
+func (l *LinuxOSInfo) ToContent() termutil.Contents { return toContent(l) }
 
 // Windows
 type WindowsOSInfo struct {
@@ -196,7 +197,7 @@ func (w *WindowsOSInfo) String() string {
 	return fmt.Sprintf("OS: %s, Kernel: %s, Platform: %s, Hostname: %s, Cores: %d, Memory: %d",
 		w.osName, w.kernel, w.platform, w.hostName, w.cores, w.memory)
 }
-func (w *WindowsOSInfo) ToMapString() map[string]string { return toMapString(w) }
+func (w *WindowsOSInfo) ToContent() termutil.Contents { return toContent(w) }
 
 // blanket implementation for Unices / *nix-like OSes 
 func runUnixCmd(cmdName string, flags ...string) (*string, error) {
@@ -238,13 +239,13 @@ func getCPUCore() int {
 	return runtime.NumCPU()
 }
 
-func toMapString(o OSInfoGetter) map[string]string {
-	ms := map[string]string{}
-	ms["OS"] = o.GetOsName()
-	ms["Kernel / Version"] = o.GetKernel()
-	ms["Platform"] = o.GetPlatform()
-	ms["Cores"] = fmt.Sprintf("%d", o.GetCores())
-	ms["Memory"] = fmt.Sprintf("%.2f", o.GetMemory())
-	ms["Hostname"] = o.GetHostName()
+func toContent(o OSInfoGetter) termutil.Contents {
+	ms := map[string][]string{}
+	ms["OS"] = []string{o.GetOsName()}
+	ms["Kernel / Version"] = []string{o.GetKernel()}
+	ms["Platform"] = []string{o.GetPlatform()}
+	ms["Cores"] = []string{fmt.Sprintf("%d", o.GetCores())}
+	ms["Memory"] = []string{fmt.Sprintf("%.2f MiB", o.GetMemory())}
+	ms["Hostname"] = []string{o.GetHostName()}
 	return ms
 }

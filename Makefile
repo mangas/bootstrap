@@ -14,6 +14,10 @@ include ./boilerplate/core/go.mk
 override GO_FSPATH = $(PWD)
 override GO_BUILD_OUT_FSPATH = $(GOPATH)/bin/bs
 
+STATIK_DEST = $(PWD)/statiks
+
+.PHONY: help statiks build
+
 ## Print all settings
 print: ## print
 
@@ -30,5 +34,12 @@ high: ## high
 	@echo i wanna get...
 
 
-build:
+build: 
 	$(MAKE) go-build
+
+statiks:
+	@statik -src=boilerplate -ns bproot -p bproot -dest=$(STATIK_DEST) -f
+	@statik -src=boilerplate/core -ns bpcore -p bpcore -dest=$(STATIK_DEST) -f
+	@statik -src=boilerplate/lyft -ns bplyft -p bplyft -dest=$(STATIK_DEST) -f
+	@statik -src=boilerplate/tool -ns bptool -p bptool -dest=$(STATIK_DEST) -f
+

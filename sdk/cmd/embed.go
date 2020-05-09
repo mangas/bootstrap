@@ -1,23 +1,23 @@
 package cmd
 
 import (
-	rice "github.com/GeertJohan/go.rice"
+	"github.com/getcouragenow/bootstrap/sdk/pkg/statics"
 	"github.com/spf13/cobra"
 )
 
-func newInitBoilerplateCmd() *cobra.Command {
+func NewInitBoilerplateCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "init",
+		Args: cobra.ExactArgs(1),
 		Short: "Write boilerplates to your current directory",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			conf := rice.Config{
-				LocateOrder: []rice.LocateMethod{
-					rice.LocateEmbedded,
-					rice.LocateAppended,
-					rice.LocateFS,
-				},
+			bp, err := statics.NewRootBoilerplate()
+			if err != nil {
+				return err
 			}
-			box, err := conf.FindBox("boilerplates")
+			if err = bp.WriteAllFiles(args[0]); err != nil {
+				return err
+			}
 			return nil
 		},
 	}

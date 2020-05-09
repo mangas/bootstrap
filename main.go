@@ -27,6 +27,7 @@ func newRootCmd() *cobra.Command {
 	cmd.AddCommand(
 		c.NewOsInfoCmd(),
 		c.NewInstallToolsCmd(),
+		c.NewListToolsCmd(),
 		c.NewInitBoilerplateCmd(),
 		// newSelfUpgradeCmd(),
 	)
@@ -36,6 +37,7 @@ func newRootCmd() *cobra.Command {
 func main() {
 	rootCmd = newRootCmd()
 	if err := rootCmd.Execute(); err != nil {
+		log.Fatalf("bs error: %v", err)
 		os.Exit(1)
 	}
 }

@@ -1,4 +1,4 @@
-package osutil
+package oses
 
 import (
 	"bytes"
@@ -17,18 +17,19 @@ type OSInfoGetter interface {
 	GetKernel() string
 	GetPlatform() string
 	GetHostName() string
-	GetMemory() int
+	GetMemory() float64
 	GetCores() int
 	String() string
+	ToMapString() map[string]string
 }
 
 func getOsInfoGetter() (OSInfoGetter, error) {
 	switch runtime.GOOS {
-	case "Windows":
+	case "windows":
 		return getWindowsOsInfo()
-	case "Darwin":
+	case "darwin":
 		return getDarwinOsInfo()
-	case "Linux":
+	case "linux":
 		return getLinuxOsInfo()
 	default:
 		return nil, errors.New("unknown / unsupported OS")
@@ -41,13 +42,13 @@ type DarwinOSInfo struct {
 	kernel   string
 	platform string
 	hostName string
-	memory   int
+	memory   float64
 	cores    int
 }
 
 func getDarwinOsInfo() (*DarwinOSInfo, error) {
 	var osName, kernel, platform, hostname *string
-	var memory int
+	var memory float64
 	var err error
 	if osName, err = getUnixOSName(); err != nil {
 		return nil, err
@@ -65,28 +66,30 @@ func getDarwinOsInfo() (*DarwinOSInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	if memory, err = strconv.Atoi(*mem); err != nil {
+	if memory, err = strconv.ParseFloat(strings.Trim(*mem, "\n"), 64); err != nil {
 		return nil, err
 	}
+	core := getCPUCore()
 	return &DarwinOSInfo{
 		osName:   *osName,
 		kernel:   *kernel,
 		platform: *platform,
 		hostName: *hostname,
-		memory:   memory / 1000,
-		cores:    getCPUCore(),
+		memory:   memory / 1000000,
+		cores:    core,
 	}, nil
 }
 func (d *DarwinOSInfo) GetOsName() string   { return d.osName }
 func (d *DarwinOSInfo) GetKernel() string   { return d.kernel }
 func (d *DarwinOSInfo) GetPlatform() string { return d.platform }
 func (d *DarwinOSInfo) GetHostName() string { return d.hostName }
-func (d *DarwinOSInfo) GetMemory() int      { return d.memory }
+func (d *DarwinOSInfo) GetMemory() float64  { return d.memory }
 func (d *DarwinOSInfo) GetCores() int       { return d.cores }
 func (d *DarwinOSInfo) String() string {
 	return fmt.Sprintf("OS: %s, Kernel: %s, Platform: %s, Hostname: %s, Cores: %d, Memory: %d",
 		d.osName, d.kernel, d.platform, d.hostName, d.cores, d.memory)
 }
+func (d *DarwinOSInfo) ToMapString() map[string]string { return toMapString(d) }
 
 // Linux
 type LinuxOSInfo struct {
@@ -94,13 +97,13 @@ type LinuxOSInfo struct {
 	kernel   string
 	platform string
 	hostName string
-	memory   int
+	memory   float64
 	cores    int
 }
 
 func getLinuxOsInfo() (*LinuxOSInfo, error) {
 	var osName, kernel, platform, hostname *string
-	var memory int
+	var memory float64
 	var err error
 	if osName, err = getUnixOSName(); err != nil {
 		return nil, err
@@ -114,11 +117,11 @@ func getLinuxOsInfo() (*LinuxOSInfo, error) {
 	if hostname, err = getUnixHostname(); err != nil {
 		return nil, err
 	}
-	mem, err := runUnixCmd("awk", "'/MemTotal/ {print $2}'", "/proc/meminfo")
+	mem, err := runUnixCmd("awk", "/MemTotal/ {print $2}", "/proc/meminfo")
 	if err != nil {
 		return nil, err
 	}
-	if memory, err = strconv.Atoi(*mem); err != nil {
+	if memory, err = strconv.ParseFloat(strings.Trim(*mem, "\n"), 64); err != nil {
 		return nil, err
 	}
 	return &LinuxOSInfo{
@@ -134,12 +137,13 @@ func (l *LinuxOSInfo) GetOsName() string   { return l.osName }
 func (l *LinuxOSInfo) GetKernel() string   { return l.kernel }
 func (l *LinuxOSInfo) GetPlatform() string { return l.platform }
 func (l *LinuxOSInfo) GetHostName() string { return l.hostName }
-func (l *LinuxOSInfo) GetMemory() int      { return l.memory }
+func (l *LinuxOSInfo) GetMemory() float64  { return l.memory }
 func (l *LinuxOSInfo) GetCores() int       { return l.cores }
 func (l *LinuxOSInfo) String() string {
 	return fmt.Sprintf("OS: %s, Kernel: %s, Platform: %s, Hostname: %s, Cores: %d, Memory: %d",
 		l.osName, l.kernel, l.platform, l.hostName, l.cores, l.memory)
 }
+func (l *LinuxOSInfo) ToMapString() map[string]string { return toMapString(l) }
 
 // Windows
 type WindowsOSInfo struct {
@@ -147,13 +151,13 @@ type WindowsOSInfo struct {
 	kernel   string
 	platform string
 	hostName string
-	memory   int
+	memory   float64
 	cores    int
 }
 
 func getWindowsOsInfo() (*WindowsOSInfo, error) {
 	var osName, platform, hostname string
-	var memory int
+	var memory float64
 	var err error
 	osName = runtime.GOOS
 	hostname, err = os.Hostname()
@@ -170,7 +174,7 @@ func getWindowsOsInfo() (*WindowsOSInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	if memory, err = strconv.Atoi(*mem); err != nil {
+	if memory, err = strconv.ParseFloat(strings.Trim(*mem, "\n"), 64); err != nil {
 		return nil, err
 	}
 	return &WindowsOSInfo{
@@ -186,12 +190,13 @@ func (w *WindowsOSInfo) GetOsName() string   { return w.osName }
 func (w *WindowsOSInfo) GetKernel() string   { return w.kernel }
 func (w *WindowsOSInfo) GetPlatform() string { return w.platform }
 func (w *WindowsOSInfo) GetHostName() string { return w.hostName }
-func (w *WindowsOSInfo) GetMemory() int      { return w.memory }
+func (w *WindowsOSInfo) GetMemory() float64  { return w.memory }
 func (w *WindowsOSInfo) GetCores() int       { return w.cores }
 func (w *WindowsOSInfo) String() string {
 	return fmt.Sprintf("OS: %s, Kernel: %s, Platform: %s, Hostname: %s, Cores: %d, Memory: %d",
 		w.osName, w.kernel, w.platform, w.hostName, w.cores, w.memory)
 }
+func (w *WindowsOSInfo) ToMapString() map[string]string { return toMapString(w) }
 
 // blanket implementation for Unices / *nix-like OSes 
 func runUnixCmd(cmdName string, flags ...string) (*string, error) {
@@ -205,7 +210,7 @@ func runUnixCmd(cmdName string, flags ...string) (*string, error) {
 	if err != nil {
 		return nil, err
 	}
-	output := out.String()
+	output := strings.TrimSpace(out.String())
 	return &output, nil
 }
 
@@ -231,4 +236,15 @@ func getUnixOSName() (*string, error) {
 
 func getCPUCore() int {
 	return runtime.NumCPU()
+}
+
+func toMapString(o OSInfoGetter) map[string]string {
+	ms := map[string]string{}
+	ms["OS"] = o.GetOsName()
+	ms["Kernel / Version"] = o.GetKernel()
+	ms["Platform"] = o.GetPlatform()
+	ms["Cores"] = fmt.Sprintf("%d", o.GetCores())
+	ms["Memory"] = fmt.Sprintf("%.2f", o.GetMemory())
+	ms["Hostname"] = o.GetHostName()
+	return ms
 }

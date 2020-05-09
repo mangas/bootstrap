@@ -5,7 +5,7 @@ LIB_BRANCH=master
 LIB_TAG=master
 LIB_FSPATH=$(GOPATH)/src/$(LIB)
 
-LIB_BIN_NAME=bs
+LIB_BIN_NAME=bs-$(LIB_NAME)
 LIB_BIN_FSPATH=$(GOPATH)/bin/$(LIB_BIN_NAME)
 
 GREEN  := $(shell tput -Txterm setaf 2)

@@ -11,7 +11,6 @@ HELP_WHITE  := $(shell tput -Txterm setaf 7)
 HELP_RESET  := $(shell tput -Txterm sgr0)
 
 
-
 # Print help
 help:
 
@@ -33,15 +32,18 @@ help:
 # generic variable loader
 VARS_OLD := $(.VARIABLES)
 
-## Variable printer
-help-print:
-	#	## generic printer
+## Print our variables 
+help-print-var:
+	# generic printer
+	# TODO: Add sorting !!
 	$(foreach v, \
 	$(filter-out $(VARS_OLD) VARS_OLD,$(.VARIABLES)), \
 	$(info ${HELP_YELLOW} $(v) = ${HELP_RESET} ${HELP_GREEN} $($(v))))
 
-## Variable printer 1
-help-print1:
+## Print all variables
+help-print-varall:
+	# this our variables plus everything else loaded by the OS
+	# TODO: add some form of categorisation if we can.
 	@echo "${.VARIABLES}" | tr ' ' '\n'
 	@echo BS_ROOT_FSPATH: 	$(BS_ROOT_FSPATH)
 

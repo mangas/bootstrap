@@ -244,7 +244,6 @@ func testGenerateMultiLanguageFilesFromTemplate(t *testing.T) {
 			"/tmp",
 			"out",
 			".json",
-			"==",
 			[]string{"fr", "es", "de", "it", "ur"},
 			false,
 		)
@@ -259,4 +258,3 @@ func testGenerateMultiLanguageFilesFromTemplate(t *testing.T) {
 			success)
 	}
 }
-

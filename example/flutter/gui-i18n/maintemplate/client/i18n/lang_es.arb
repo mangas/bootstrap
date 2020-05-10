@@ -1,0 +1,21 @@
+{
+  "@@last_modified": "2020-05-08T18:13:52.474935",
+  "testMessage": "Este es un mensaje de prueba i18n. Si puede leerlo en diferentes idiomas después de presionar uno de los botones debajo, todo debería estar configurado correctamente.",
+  "@testMessage": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  },
+  "testMessageTwo": "Hola, aquí está la segunda Cadena de prueba ...: -) Veamos si esto funciona",
+  "@testMessageTwo": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  },
+  "testMessageThree": "¡Tercera! Hola traductor de google, ¿qué pasa?",
+  "@testMessageThree": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  }
+}

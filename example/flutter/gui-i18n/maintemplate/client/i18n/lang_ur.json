@@ -1,0 +1,21 @@
+{
+  "@@last_modified": "2020-05-08T18:13:52.474935",
+  "testMessage": "یہ i18n ٹیسٹ پیغام ہے۔ اگر آپ اسے ہر زبان کے نیچے کے بٹنوں میں سے کسی ایک کو دبانے کے بعد مختلف زبانوں میں پڑھ سکتے ہیں تو صحیح طریقے سے سیٹ اپ ہونا چاہئے۔",
+  "@testMessage": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  },
+  "testMessageTwo": "ارے یہاں دوسرا ٹیسٹ سٹرنگ ہے ...: - آؤ دیکھتے ہیں کہ یہ کام کرتا ہے",
+  "@testMessageTwo": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  },
+  "testMessageThree": "تیسرا! ارے گوگل ترجمہ ، کیا ہو رہا ہے؟",
+  "@testMessageThree": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  }
+}

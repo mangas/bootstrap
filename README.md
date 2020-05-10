@@ -2,14 +2,15 @@
 
 Bootstrap provides the tooling.
 
-It is concerned with:
+Projects can make their main and modules as they see fit, and use this tooling for them.
+
+It has:
 
 1. binary tools that are reused on projects
 
 2. make files that are reused on projects
 
 3. core flutter and golang code that are reused on projects.
-
 
 It covers the following scenarios:
 
@@ -21,8 +22,6 @@ It covers the following scenarios:
 
 4. Ops time - when managing the deployment.
 
-
-Projects should make their main and modules as they see fit, and use this tooling for them.
 
 ## Dev time
 

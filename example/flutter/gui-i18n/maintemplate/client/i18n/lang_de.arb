@@ -1,0 +1,21 @@
+{
+  "@@last_modified": "2020-05-08T18:13:52.474935",
+  "testMessage": "Dies ist eine i18n-Testnachricht. Wenn Sie es in verschiedenen Sprachen lesen können, nachdem Sie eine der Schaltflächen unten gedrückt haben, sollte alles korrekt eingerichtet sein.",
+  "@testMessage": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  },
+  "testMessageTwo": "Hey, hier ist die zweite Testzeichenfolge ...: -) Mal sehen, ob dies funktioniert",
+  "@testMessageTwo": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  },
+  "testMessageThree": "Dritte! Hey google translate, was ist los?",
+  "@testMessageThree": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  }
+}

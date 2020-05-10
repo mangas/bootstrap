@@ -1,0 +1,21 @@
+{
+  "@@last_modified": "2020-05-08T18:13:52.474935",
+  "testMessage": "This is a i18n test message. If you can read it in different languages after pressing one of the buttons below everything should be setup correctly.",
+  "@testMessage": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  },
+  "testMessageTwo": "Hey here is the second test String... : - ) Let's see if this works",
+  "@testMessageTwo": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  },
+  "testMessageThree": "Third one! Hey google translate, what's up?",
+  "@testMessageThree": {
+    "description": "test example for i18n tool",
+    "placeholders": {},
+    "type": "text"
+  }
+}

@@ -1,7 +1,7 @@
 # os tools
 
-GO_OS 		:= $(shell go env GOOS)
-GO_ARCH		:= $(shell go env GOARCH)
+export GO_OS 		:= $(shell go env GOOS)
+export GO_ARCH		?= $(shell go env GOARCH)
 
 ## Prints the OS settings
 os-print:

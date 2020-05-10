@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: maintemplateComponent-secret
+type: Opaque
+data:
+  minioAccesskey: UkVQTEFDRV9USElT
+  minioEnckey: dGhpcyBpcyBvZiB0eXBlIGJ5dGVz
+  
+  minioLocation: UkVQTEFDRV9USElT
+  minioSecretkey: UkVQTEFDRV9USElT
+  
+  
+  

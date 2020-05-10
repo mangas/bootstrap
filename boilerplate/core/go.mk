@@ -10,8 +10,6 @@ GO_BUILD_OUT_FSPATH = ???
 # Packages to operate one
 GO_PKG_LIST = ???
 
-
-
 ## Print
 go-print: 
 	@echo
@@ -28,8 +26,6 @@ go-boilerplate-update:
 	# Example: See: https://github.com/lyft/flytepropeller/tree/master/boilerplate
 	# TODO: This will be redundant once we have BS releases working.
 	@boilerplate/update.sh
-
-
 
 ## Build the code
 go-build:

@@ -25,6 +25,11 @@ GO_ARCH=go-arch
 override GO_ARCH=go-arch_override
 
 ## Print all settings in oder loaded
+STATIK_DEST = $(PWD)/statiks
+
+.PHONY: help statiks scan-statiks-tools build
+
+## Print all settings
 print: ## print
 	$(MAKE) bs-print
 
@@ -50,5 +55,16 @@ print-env:
 
 	@echo GO_ARCH: 	$(GO_ARCH)
 
-build:
+build: statiks scan-statiks-tools
 	$(MAKE) go-build
+
+statiks:
+	@statik -src=$(PWD)/boilerplate/core -ns bpcore -p bpcore -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate/lyft -ns bplyft -p bplyft -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate/tool -ns bptool -p bptool -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate/os -ns bpos -p bpos -dest=$(STATIK_DEST) -f
+	@statik -src=$(PWD)/boilerplate -ns bproot -p bproot -dest=$(STATIK_DEST) -f
+
+scan-statiks-tools:
+	@go run $(PWD)/sdk/cmd/scantool -t $(PWD)/tool -s $(STATIK_DEST) -o $(PWD)/sdk/cmd/path.go
+

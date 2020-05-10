@@ -30,8 +30,8 @@ type ArbAttr struct {
 }
 
 // translate a string from languages to language
-func getTemplateWords(m *linkedhashmap.Map, delay time.Duration, tries int, fromLang, sep string, languages []string) ([]Translate, error) {
-	words := getTranslateWords(m, sep)
+func getTemplateWords(m *linkedhashmap.Map, delay time.Duration, tries int, fromLang string, languages []string) ([]Translate, error) {
+	words := getTranslateWords(m)
 	var wordsTranslated []Translate
 	for _, lang := range languages {
 		t := Translate{}
@@ -54,13 +54,12 @@ func getTemplateWords(m *linkedhashmap.Map, delay time.Duration, tries int, from
 	return wordsTranslated, nil
 }
 
-func getTranslatedMaps(sep string, WordsTranslated []Translate, m *linkedhashmap.Map, full bool) (*TranslatedMaps, error) {
+func getTranslatedMaps(WordsTranslated []Translate, m *linkedhashmap.Map, full bool) (*TranslatedMaps, error) {
 
 	translatedMaps := &TranslatedMaps{}
 	for _, tr := range WordsTranslated {
 		mapLang := linkedhashmap.New()
 		it := m.Iterator()
-		// words := strings.Split(tr.Words, sep)
 		i := 0
 		for it.Next() {
 			if !strings.HasPrefix(it.Key().(string), "@") {
@@ -68,10 +67,6 @@ func getTranslatedMaps(sep string, WordsTranslated []Translate, m *linkedhashmap
 					mapLang.Put(it.Key(), strings.TrimSpace(tr.Words[i]))
 					i++
 				}
-				// if len(tr.Words) > i {
-				// 	mapLang.Put(it.Key(), strings.TrimSpace(words[i]))
-				// 	i++
-				// }
 			} else if full {
 				mapLang.Put(it.Key(), it.Value())
 			}
@@ -84,7 +79,7 @@ func getTranslatedMaps(sep string, WordsTranslated []Translate, m *linkedhashmap
 	return translatedMaps, nil
 }
 
-func getTranslateWords(m *linkedhashmap.Map, sep string) []string {
+func getTranslateWords(m *linkedhashmap.Map) []string {
 	it := m.Iterator()
 	var out []string
 	for it.Next() {
@@ -96,5 +91,4 @@ func getTranslateWords(m *linkedhashmap.Map, sep string) []string {
 		}
 	}
 	return out
-	// return strings.Join(out, sep)
 }

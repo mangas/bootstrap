@@ -3,7 +3,7 @@ package main_test
 import (
 	"encoding/json"
 	p "github.com/getcouragenow/bootstrap/tool/protofig"
-	"github.com/getcouragenow/bootstrap/tool/protofig/config"
+	"github.com/getcouragenow/bootstrap/tool/protofig/generated/go"
 	"testing"
 )
 

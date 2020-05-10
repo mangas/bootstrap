@@ -248,7 +248,7 @@ func testGetTemplateWords(t *testing.T) {
 		}
 
 		translated, err = getTemplateWords(
-			m, 3*time.Second, 3, "en", separator, []string{"en", "fr", "de", "it", "ur"},
+			m, 3*time.Second, 3, "en", []string{"en", "fr", "de", "it", "ur"},
 		)
 		if err != nil {
 			t.Fatalf(
@@ -278,7 +278,7 @@ func testGetTemplateWords(t *testing.T) {
 func testGetTranslatedMaps(t *testing.T) {
 	t.Log("Tests mapping translated words back to map")
 	{
-		_, err := getTranslatedMaps(separator, translated, m, true)
+		_, err := getTranslatedMaps(translated, m, true)
 		if err != nil {
 			t.Fatalf("\t%s\tShould be able to map translated words back to the linkedhashmap: %v",
 				failed, err)

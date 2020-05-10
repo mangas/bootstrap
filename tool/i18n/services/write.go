@@ -285,7 +285,7 @@ func GenerateMultiLanguagesArbFilesFromJSONFiles(dir, prefix, extFile, outExtFil
 // }
 
 // GenerateMultiLanguageFilesFromTemplate write multilanguage json files
-func GenerateMultiLanguageFilesFromTemplate(templatePath, outPath, fileName, ext, sep string, languages []string, full bool) error {
+func GenerateMultiLanguageFilesFromTemplate(templatePath, outPath, fileName, ext string, languages []string, full bool) error {
 
 	data, err := ioutil.ReadFile(templatePath)
 	if err != nil {
@@ -298,12 +298,12 @@ func GenerateMultiLanguageFilesFromTemplate(templatePath, outPath, fileName, ext
 		return err
 	}
 
-	wordsTranslated, err := getTemplateWords(m, config.TranslateTimeout, 3, "en", sep, languages)
+	wordsTranslated, err := getTemplateWords(m, config.TranslateTimeout, 3, "en", languages)
 	if err != nil {
 		return err
 	}
 
-	translatedMaps, err := getTranslatedMaps(sep, wordsTranslated, m, full)
+	translatedMaps, err := getTranslatedMaps(wordsTranslated, m, full)
 
 	if err != nil {
 		return err
